@@ -1,37 +1,36 @@
 <?php
 
-/*
- * This file is part of the OAuth2 Client extension for TYPO3
- * - (c) 2021 Waldhacker UG
- *
- * It is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License, either version 2
- * of the License, or any later version.
- *
- * For the full copyright and license information, please read the
- * LICENSE.txt file that was distributed with this source code.
- *
- * The TYPO3 project - inspiring people to share!
- */
-
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 
 defined('TYPO3') or die();
 
-(static function () {
-    $languageFile = 'LLL:EXT:oauth2_client/Resources/Private/Language/locallang_be.xlf:';
+ExtensionManagementUtility::addTCAcolumns('be_users', [
+    'tx_oauth2_client_configs' => [
+        'label' => 'LLL:EXT:oauth2_client/Resources/Private/Language/locallang_be.xlf:tx_oauth2_client_config',
+        'exclude' => true,
+        'config' => [
+            'type' => 'inline',
+            'renderType' => 'oauth2providers',
+            'foreign_table' => 'tx_oauth2_beuser_provider_configuration',
+            'foreign_field' => 'parentid',
+        ],
+    ],
+]);
+ExtensionManagementUtility::addToAllTCAtypes('be_users', 'tx_oauth2_client_configs', '', 'before:avatar');
 
-    ExtensionManagementUtility::addTCAcolumns('be_users', [
-        'tx_oauth2_client_configs' => [
-            'label' => $languageFile . 'tx_oauth2_client_config',
-            'exclude' => true,
+$version = VersionNumberUtility::convertVersionStringToArray(VersionNumberUtility::getNumericTypo3Version());
+if ($version['version_main'] >= 14) {
+    // TYPO3 v14 renders user settings through FormEngine (see ManageProvidersButtonElement).
+    ExtensionManagementUtility::addUserSetting(
+        'tx_oauth2_client_configs',
+        [
+            'label' => 'LLL:EXT:oauth2_client/Resources/Private/Language/locallang_be.xlf:userSettings.label',
             'config' => [
-                'type' => 'inline',
-                'renderType' => 'oauth2providers',
-                'foreign_table' => 'tx_oauth2_beuser_provider_configuration',
-                'foreign_field' => 'parentid',
+                'type' => 'user',
+                'renderType' => 'oauth2manageprovidersbutton',
             ],
         ],
-    ]);
-    ExtensionManagementUtility::addToAllTCAtypes('be_users', 'tx_oauth2_client_configs', '', 'before:avatar');
-})();
+        'after:mfaProviders'
+    );
+}

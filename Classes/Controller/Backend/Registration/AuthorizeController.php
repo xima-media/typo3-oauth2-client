@@ -2,20 +2,6 @@
 
 declare(strict_types=1);
 
-/*
- * This file is part of the OAuth2 Client extension for TYPO3
- * - (c) 2021 waldhacker UG (haftungsbeschränkt)
- *
- * It is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License, either version 2
- * of the License, or any later version.
- *
- * For the full copyright and license information, please read the
- * LICENSE.txt file that was distributed with this source code.
- *
- * The TYPO3 project - inspiring people to share!
- */
-
 namespace Waldhacker\Oauth2Client\Controller\Backend\Registration;
 
 use Psr\Http\Message\ResponseFactoryInterface;
@@ -31,7 +17,8 @@ use TYPO3\CMS\Core\Context\UserAspect;
 use TYPO3\CMS\Core\Session\Backend\Exception\SessionNotCreatedException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
-use TYPO3\CMS\Fluid\View\StandaloneView;
+use TYPO3\CMS\Core\View\ViewFactoryData;
+use TYPO3\CMS\Core\View\ViewFactoryInterface;
 use Waldhacker\Oauth2Client\Service\Oauth2ProviderManager;
 use Waldhacker\Oauth2Client\Service\Oauth2Service;
 use Waldhacker\Oauth2Client\Session\SessionManager;
@@ -51,7 +38,8 @@ class AuthorizeController implements LoggerAwareInterface
         private readonly SessionManager $sessionManager,
         private readonly UriBuilder $uriBuilder,
         private readonly ResponseFactoryInterface $responseFactory,
-        private readonly Context $context
+        private readonly Context $context,
+        private readonly ViewFactoryInterface $viewFactory,
     ) {
     }
 
@@ -115,8 +103,10 @@ class AuthorizeController implements LoggerAwareInterface
 
     private function callback(): ResponseInterface
     {
-        $view = GeneralUtility::makeInstance(StandaloneView::class);
-        $view->setTemplatePathAndFilename('EXT:oauth2_client/Resources/Private/Templates/Backend/Callback.html');
+        $viewFactoryData = new ViewFactoryData(
+            templatePathAndFilename: 'EXT:oauth2_client/Resources/Private/Templates/Backend/Callback.html'
+        );
+        $view = $this->viewFactory->create($viewFactoryData);
         $view->assign('path', PathUtility::getAbsoluteWebPath(
             GeneralUtility::getFileAbsFileName('EXT:oauth2_client/Resources/Public/JavaScript/callback.js')
         ));

@@ -50,13 +50,3 @@ parameters:
 			count: 1
 			path: ../Classes/Session/v10/UserSessionManager.php
 
-		-
-			message: "#^Cannot call method fetchAssociative\\(\\) on Doctrine\\\\DBAL\\\\Result\\|int\\.$#"
-			count: 1
-			path: ../Classes/Updates/RenameClientConfigsTableUpdateWizard20220122130120.php
-
-		-
-			message: "#^Cannot call method fetchOne\\(\\) on Doctrine\\\\DBAL\\\\Result\\|int\\.$#"
-			count: 1
-			path: ../Classes/Updates/RenameClientConfigsTableUpdateWizard20220122130120.php
-

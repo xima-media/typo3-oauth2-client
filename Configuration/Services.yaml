@@ -47,6 +47,3 @@ services:
 
   Waldhacker\Oauth2Client\Service\Oauth2ProviderManager:
     public: true
-
-  Waldhacker\Oauth2Client\Updates\RenameClientConfigsTableUpdateWizard20220122130120:
-    public: true

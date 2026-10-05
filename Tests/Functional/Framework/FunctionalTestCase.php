@@ -68,7 +68,6 @@ abstract class FunctionalTestCase extends \TYPO3\TestingFramework\Core\Functiona
         'frontend',
         'extbase',
         'install',
-        'recordlist',
         'felogin',
         'fluid',
         'fluid_styled_content',

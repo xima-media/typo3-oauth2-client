@@ -2,20 +2,6 @@
 
 declare(strict_types=1);
 
-/*
- * This file is part of the OAuth2 Client extension for TYPO3
- * - (c) 2021 waldhacker UG (haftungsbeschränkt)
- *
- * It is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License, either version 2
- * of the License, or any later version.
- *
- * For the full copyright and license information, please read the
- * LICENSE.txt file that was distributed with this source code.
- *
- * The TYPO3 project - inspiring people to share!
- */
-
 namespace Waldhacker\Oauth2Client\Service;
 
 use InvalidArgumentException;
@@ -149,9 +135,11 @@ class Oauth2ProviderManager
 
         $siteConfiguration = $site->getConfiguration();
         $languageConfiguration = $language->toArray();
-        $enabledProviderIds = empty($languageConfiguration['enabled_oauth2_providers'])
-              ? GeneralUtility::trimExplode(',', $siteConfiguration['enabled_oauth2_providers'] ?? '')
-              : GeneralUtility::trimExplode(',', $languageConfiguration['enabled_oauth2_providers']);
+        $enabledProviderIds = $languageConfiguration['enabled_oauth2_providers'] ?? $siteConfiguration['enabled_oauth2_providers'] ?? null;
+        $enabledProviderIds = is_string($enabledProviderIds) ? GeneralUtility::trimExplode(',', $enabledProviderIds, true) : $enabledProviderIds;
+        if (!is_array($enabledProviderIds)) {
+            return null;
+        }
 
         $configuredEnabledProviders = array_filter(
             $this->getConfiguredFrontendProviders() ?? [],

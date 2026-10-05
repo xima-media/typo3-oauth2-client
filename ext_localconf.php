@@ -5,6 +5,7 @@ use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
 use Waldhacker\Oauth2Client\Authentication\BackendAuthenticationService;
 use Waldhacker\Oauth2Client\Authentication\FrontendAuthenticationService;
 use Waldhacker\Oauth2Client\Backend\DataHandling\DataHandlerHook;
+use Waldhacker\Oauth2Client\Backend\Form\RenderType\ManageProvidersButtonElement;
 use Waldhacker\Oauth2Client\Backend\Form\RenderType\Oauth2ProvidersElement;
 use Waldhacker\Oauth2Client\Backend\LoginProvider\Oauth2LoginProvider;
 use Waldhacker\Oauth2Client\Controller\Frontend\ManageProvidersController;
@@ -52,7 +53,8 @@ defined('TYPO3') || die();
         'oauth2Client',
         'ManageProviders',
         [ManageProvidersController::class => 'list,deactivate'],
-        [ManageProvidersController::class => 'list,deactivate']
+        [ManageProvidersController::class => 'list,deactivate'],
+        ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT
     );
 
     $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['backend']['loginProviders'][Oauth2LoginProvider::PROVIDER_ID] = [
@@ -66,6 +68,12 @@ defined('TYPO3') || die();
         'nodeName' => 'oauth2providers',
         'priority' => '70',
         'class' => Oauth2ProvidersElement::class,
+    ];
+
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry'][1616684030] = [
+        'nodeName' => 'oauth2manageprovidersbutton',
+        'priority' => '70',
+        'class' => ManageProvidersButtonElement::class,
     ];
 
     $GLOBALS['TYPO3_CONF_VARS']['DB']['additionalQueryRestrictions'][

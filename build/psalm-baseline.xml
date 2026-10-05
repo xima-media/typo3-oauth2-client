@@ -165,10 +165,4 @@
       <code>$userSession</code>
     </PossiblyInvalidArgument>
   </file>
-  <file src="Classes/Updates/RenameClientConfigsTableUpdateWizard20220122130120.php">
-    <PossiblyInvalidMethodCall occurrences="2">
-      <code>fetchAssociative</code>
-      <code>fetchOne</code>
-    </PossiblyInvalidMethodCall>
-  </file>
 </files>

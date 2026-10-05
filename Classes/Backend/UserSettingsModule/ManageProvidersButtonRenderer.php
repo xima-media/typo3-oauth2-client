@@ -2,20 +2,6 @@
 
 declare(strict_types=1);
 
-/*
- * This file is part of the OAuth2 Client extension for TYPO3
- * - (c) 2021 waldhacker UG (haftungsbeschränkt)
- *
- * It is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License, either version 2
- * of the License, or any later version.
- *
- * For the full copyright and license information, please read the
- * LICENSE.txt file that was distributed with this source code.
- *
- * The TYPO3 project - inspiring people to share!
- */
-
 namespace Waldhacker\Oauth2Client\Backend\UserSettingsModule;
 
 use Doctrine\DBAL\Exception;
@@ -24,11 +10,16 @@ use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Context\Exception\AspectNotFoundException;
 use TYPO3\CMS\Core\Imaging\IconFactory;
-use TYPO3\CMS\Core\Imaging\Icon;
+use TYPO3\CMS\Core\Imaging\IconSize;
 use TYPO3\CMS\Core\Localization\LanguageService;
 use Waldhacker\Oauth2Client\Repository\BackendUserRepository;
 use Waldhacker\Oauth2Client\Service\Oauth2ProviderManager;
 
+/**
+ * Renders the "manage / setup providers" button in the backend user settings module on TYPO3 v13,
+ * where user settings of type "user" are rendered through a userFunc. TYPO3 v14 renders the same
+ * field through the ManageProvidersButtonElement FormEngine node instead.
+ */
 class ManageProvidersButtonRenderer
 {
     public function __construct(
@@ -71,12 +62,15 @@ class ManageProvidersButtonRenderer
                     (string)$this->uriBuilder->buildUriFromRoute('oauth2_manage_providers'),
                     ENT_QUOTES | ENT_HTML5
                 )
-                . '" class="btn btn-' . ($activeProviders ? 'default' : 'success') . '">';
-            $html .= $this->iconFactory->getIcon($hasActiveProviders ? 'actions-cog' : 'actions-add', Icon::SIZE_SMALL);
+                . '" class="btn btn-' . ($hasActiveProviders ? 'default' : 'success') . '">';
+            $html .= $this->iconFactory->getIcon(
+                $hasActiveProviders ? 'actions-cog' : 'actions-add',
+                IconSize::SMALL
+            )->render();
             $html .= ' <span>'
                 . htmlspecialchars(
                     $lang->sL(
-                        $languageFile . 'oauth2Providers.' . ($activeProviders ? 'manageLinkTitle' : 'setupLinkTitle')
+                        $languageFile . 'oauth2Providers.' . ($hasActiveProviders ? 'manageLinkTitle' : 'setupLinkTitle')
                     ),
                     ENT_QUOTES | ENT_HTML5
                 )

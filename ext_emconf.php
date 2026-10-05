@@ -10,13 +10,13 @@ $EM_CONF[$_EXTKEY] = [
     'state'            => 'stable',
     'uploadfolder'     => '0',
     'clearCacheOnLoad' => 1,
-    'version'          => '4.0.6',
+    'version'          => '5.0.0',
     'constraints'      => [
         'depends' => [
-            'backend' => '12.4.0-13.4.99',
-            'fluid' => '12.4.0-13.4.99',
-            'setup' => '12.4.0-13.4.99',
-            'typo3' => '12.4.0-13.4.99',
+            'backend' => '13.4.0-14.4.99',
+            'fluid' => '13.4.0-14.4.99',
+            'setup' => '13.4.0-14.4.99',
+            'typo3' => '13.4.0-14.4.99',
         ]
     ],
     'autoload' => [

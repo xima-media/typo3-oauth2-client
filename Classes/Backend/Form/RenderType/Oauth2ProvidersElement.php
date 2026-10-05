@@ -2,29 +2,13 @@
 
 declare(strict_types=1);
 
-/*
- * This file is part of the OAuth2 Client extension for TYPO3
- * - (c) 2021 waldhacker UG (haftungsbeschränkt)
- *
- * It is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License, either version 2
- * of the License, or any later version.
- *
- * For the full copyright and license information, please read the
- * LICENSE.txt file that was distributed with this source code.
- *
- * The TYPO3 project - inspiring people to share!
- */
-
 namespace Waldhacker\Oauth2Client\Backend\Form\RenderType;
 
 use TYPO3\CMS\Backend\Form\Element\AbstractFormElement;
-use TYPO3\CMS\Backend\Form\NodeFactory;
 use TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
-use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Imaging\IconSize;
 use TYPO3\CMS\Core\Utility\StringUtility;
 use Waldhacker\Oauth2Client\Service\Oauth2ProviderManager;
 
@@ -32,23 +16,12 @@ class Oauth2ProvidersElement extends AbstractFormElement
 {
     private const BE_USERS_TABLE = 'be_users';
     private const FE_USERS_TABLE = 'fe_users';
-    /**
-     * This property is declared for TYPO3 v13, but without type hint for TYPO3 v12 compatibility
-     * @var IconFactory
-     */
-    protected $iconFactory;
-    private readonly UriBuilder $uriBuilder;
-    private readonly Oauth2ProviderManager $oauth2ProviderManager;
 
-    public function __construct(?NodeFactory $nodeFactory = null, array $data = [])
-    {
-        if (is_callable(parent::class . '::__construct')) {
-            // @TODO remove once TYPO3 v12 compatibility is dropped
-            parent::__construct($nodeFactory, $data);
-        }
-        $this->iconFactory ??= GeneralUtility::makeInstance(IconFactory::class);
-        $this->uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
-        $this->oauth2ProviderManager = GeneralUtility::makeInstance(Oauth2ProviderManager::class);
+    public function __construct(
+        protected IconFactory $iconFactory,
+        private readonly UriBuilder $uriBuilder,
+        private readonly Oauth2ProviderManager $oauth2ProviderManager,
+    ) {
     }
 
     /**
@@ -76,7 +49,7 @@ class Oauth2ProvidersElement extends AbstractFormElement
             $lang->sL($languageFile . 'labels.oauth2.disabled'),
             ENT_QUOTES | ENT_HTML5
         );
-        $status = '<span class="label label-danger label-space-right t3js-oauth2-status-label" data-alternative-label="'
+        $status = '<span class="badge badge-danger me-2 t3js-oauth2-status-label" data-alternative-label="'
             . $enabledLabel . '">' . $disabledLabel . '</span>';
 
         $configuredProviders = $tableName === self::BE_USERS_TABLE
@@ -98,7 +71,7 @@ class Oauth2ProvidersElement extends AbstractFormElement
             }
 
             if ($activeProviders !== []) {
-                $status = '<span class="label label-success label-space-right t3js-oauth2-status-label"'
+                $status = '<span class="badge badge-success me-2 t3js-oauth2-status-label"'
                     . ' data-alternative-label="' . $disabledLabel . '">' . $enabledLabel . '</span>';
 
                 // Add providers list
@@ -109,7 +82,7 @@ class Oauth2ProvidersElement extends AbstractFormElement
                         . '" style="line-height: 2.1em;">';
                     $childHtml[] = $this->iconFactory->getIcon(
                         $activeProvider['providerConfiguration']->getIconIdentifier(),
-                        Icon::SIZE_SMALL
+                        IconSize::SMALL
                     );
                     $childHtml[] = htmlspecialchars(
                         $lang->sL($activeProvider['providerConfiguration']->getLabel()),
@@ -166,7 +139,7 @@ class Oauth2ProvidersElement extends AbstractFormElement
                                    ) .
                                    '"';
                     $childHtml[] = '>';
-                    $childHtml[] = $this->iconFactory->getIcon('actions-delete', Icon::SIZE_SMALL)->render('inline');
+                    $childHtml[] = $this->iconFactory->getIcon('actions-delete', IconSize::SMALL)->render('inline');
                     $childHtml[] = '</a>';
                     $childHtml[] = '</li>';
                 }
@@ -175,6 +148,8 @@ class Oauth2ProvidersElement extends AbstractFormElement
         }
         $fieldId = 't3js-form-field-oauth2-id' . StringUtility::getUniqueId('-');
 
+        $html[] = $this->renderLabel($fieldId);
+        $html[] = $status;
         $html[] = '<div class="formengine-field-item t3js-formengine-field-item" id="'
             . htmlspecialchars($fieldId) . '">';
         $html[] = '<div class="form-control-wrap" style="max-width: '
@@ -187,7 +162,7 @@ class Oauth2ProvidersElement extends AbstractFormElement
         $html[] = '</div>';
         $html[] = '</div>';
 
-        $resultArray['html'] = $status . implode(PHP_EOL, $html);
+        $resultArray['html'] = implode(PHP_EOL, $html);
         return $resultArray;
     }
 }

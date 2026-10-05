@@ -1,6 +1,15 @@
 # Changelog
 
 
+## 5.0.0 (2026-06-16)
+
+### Tasks
+
+* TYPO3 v14 compatibility [Maik Schneider]
+
+* Drop TYPO3 v12 support [Maik Schneider]
+
+
 ## 4.0.0 (2025-02-12)
 
 ### Tasks
