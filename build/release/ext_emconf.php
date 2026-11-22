@@ -17,7 +17,7 @@ $EM_CONF[$_EXTKEY] = [
             'fluid' => '11.5.99-12.4.99',
             'setup' => '11.5.99-12.4.99',
             'typo3' => '11.5.99-12.4.99',
-        ]
+        ],
     ],
     'autoload' => [
         'psr-4' => [
@@ -27,5 +27,5 @@ $EM_CONF[$_EXTKEY] = [
             'Resources/Private/PHP/league',
             'Resources/Private/PHP/paragonie',
         ],
-    ]
+    ],
 ];

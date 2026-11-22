@@ -24,8 +24,7 @@ class Oauth2LoginProvider implements LoginProviderInterface
     public function __construct(
         private readonly Oauth2ProviderManager $oauth2ProviderManager,
         private readonly ExtensionConfiguration $extensionConfiguration
-    ) {
-    }
+    ) {}
 
     /**
      * Backend login rendering is handled by modifyView(). On TYPO3 v13 the
@@ -36,9 +35,7 @@ class Oauth2LoginProvider implements LoginProviderInterface
      *
      * @param mixed $view StandaloneView on TYPO3 v13
      */
-    public function render($view, PageRenderer $pageRenderer, LoginController $loginController): void
-    {
-    }
+    public function render($view, PageRenderer $pageRenderer, LoginController $loginController): void {}
 
     public function modifyView(ServerRequestInterface $request, ViewInterface $view): string
     {

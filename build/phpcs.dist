@@ -1,5 +1,7 @@
 <?php
 
 $config = \TYPO3\CodingStandards\CsFixerConfig::create();
-$config->getFinder()->in(__DIR__ . '/../');
+$config->getFinder()
+    ->in(dirname(__DIR__))
+    ->exclude(['node_modules', 'public', 'var', 'vendor']);
 return $config;

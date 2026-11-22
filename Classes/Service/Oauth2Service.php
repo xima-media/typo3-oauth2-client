@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Waldhacker\Oauth2Client\Service;
 
-use Exception;
 use League\OAuth2\Client\Provider\AbstractProvider;
 use League\OAuth2\Client\Provider\ResourceOwnerInterface;
 use League\OAuth2\Client\Token\AccessToken;
@@ -76,7 +75,7 @@ class Oauth2Service
             if ($accessToken instanceof AccessToken) {
                 return $accessToken;
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->logger->warning($e->getMessage());
         }
         return null;
@@ -87,7 +86,7 @@ class Oauth2Service
         $user = null;
         try {
             $user = $provider->getResourceOwner($accessToken);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->logger->warning($e->getMessage());
         }
         return $user;

@@ -1,52 +1,775 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Method Waldhacker\\\\Oauth2Client\\\\Backend\\\\LoginProvider\\\\Oauth2LoginProvider\\:\\:render\\(\\) has no return typehint specified\\.$#"
+			message: '#^Cannot cast mixed to string\.$#'
+			identifier: cast.string
+			count: 5
+			path: ../Classes/Authentication/BackendAuthenticationService.php
+
+		-
+			message: '#^Cannot cast mixed to int\.$#'
+			identifier: cast.int
+			count: 1
+			path: ../Classes/Authentication/FrontendAuthenticationService.php
+
+		-
+			message: '#^Cannot cast mixed to string\.$#'
+			identifier: cast.string
+			count: 4
+			path: ../Classes/Authentication/FrontendAuthenticationService.php
+
+		-
+			message: '#^Cannot access offset ''be_user'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: ../Classes/Backend/DataHandling/DataHandlerHook.php
+
+		-
+			message: '#^Cannot access offset ''ctrl'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: ../Classes/Backend/DataHandling/DataHandlerHook.php
+
+		-
+			message: '#^Cannot access offset ''enablecolumns'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: ../Classes/Backend/DataHandling/DataHandlerHook.php
+
+		-
+			message: '#^Cannot access offset ''fe_user'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: ../Classes/Backend/DataHandling/DataHandlerHook.php
+
+		-
+			message: '#^Cannot access offset ''tx_oauth2_beuser_provider_configuration'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: ../Classes/Backend/DataHandling/DataHandlerHook.php
+
+		-
+			message: '#^Cannot access offset ''tx_oauth2_feuser_provider_configuration'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: ../Classes/Backend/DataHandling/DataHandlerHook.php
+
+		-
+			message: '#^Parameter \#1 \$providerId of method Waldhacker\\Oauth2Client\\Service\\Oauth2ProviderManager\:\:hasBackendProvider\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: ../Classes/Backend/DataHandling/DataHandlerHook.php
+
+		-
+			message: '#^Possibly invalid array key type mixed\.$#'
+			identifier: array.invalidKey
+			count: 2
+			path: ../Classes/Backend/DataHandling/DataHandlerHook.php
+
+		-
+			message: '#^Cannot cast mixed to int\.$#'
+			identifier: cast.int
+			count: 1
+			path: ../Classes/Backend/Form/RenderType/ManageProvidersButtonElement.php
+
+		-
+			message: '#^Method Waldhacker\\Oauth2Client\\Backend\\Form\\RenderType\\ManageProvidersButtonElement\:\:render\(\) should return array\<string, mixed\> but returns array\.$#'
+			identifier: return.type
+			count: 1
+			path: ../Classes/Backend/Form/RenderType/ManageProvidersButtonElement.php
+
+		-
+			message: '#^Cannot access offset ''children'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: ../Classes/Backend/Form/RenderType/Oauth2ProvidersElement.php
+
+		-
+			message: '#^Cannot access offset ''fieldConf'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: ../Classes/Backend/Form/RenderType/Oauth2ProvidersElement.php
+
+		-
+			message: '#^Cannot access offset ''providerConfiguration'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 6
+			path: ../Classes/Backend/Form/RenderType/Oauth2ProvidersElement.php
+
+		-
+			message: '#^Cannot access offset ''uid'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: ../Classes/Backend/Form/RenderType/Oauth2ProvidersElement.php
+
+		-
+			message: '#^Cannot call method getAttribute\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: ../Classes/Backend/Form/RenderType/Oauth2ProvidersElement.php
+
+		-
+			message: '#^Cannot call method getIconIdentifier\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: ../Classes/Backend/Form/RenderType/Oauth2ProvidersElement.php
+
+		-
+			message: '#^Cannot call method getIdentifier\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: ../Classes/Backend/Form/RenderType/Oauth2ProvidersElement.php
+
+		-
+			message: '#^Cannot call method getLabel\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 4
+			path: ../Classes/Backend/Form/RenderType/Oauth2ProvidersElement.php
+
+		-
+			message: '#^Cannot call method getRequestUri\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: ../Classes/Backend/Form/RenderType/Oauth2ProvidersElement.php
+
+		-
+			message: '#^Parameter \#1 \$array of function array_column expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: ../Classes/Backend/Form/RenderType/Oauth2ProvidersElement.php
+
+		-
+			message: '#^Parameter \#1 \$identifier of method TYPO3\\CMS\\Core\\Imaging\\IconFactory\:\:getIcon\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: ../Classes/Backend/Form/RenderType/Oauth2ProvidersElement.php
+
+		-
+			message: '#^Parameter \#1 \$input of method TYPO3\\CMS\\Core\\Localization\\LanguageService\:\:sL\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 4
+			path: ../Classes/Backend/Form/RenderType/Oauth2ProvidersElement.php
+
+		-
+			message: '#^Parameter \#1 \$keys of function array_combine expects an array of values castable to string, list given\.$#'
+			identifier: argument.type
+			count: 1
+			path: ../Classes/Backend/Form/RenderType/Oauth2ProvidersElement.php
+
+		-
+			message: '#^Parameter \#1 \$keys of function array_combine expects array\<int\|string\>, list given\.$#'
+			identifier: argument.type
+			count: 1
+			path: ../Classes/Backend/Form/RenderType/Oauth2ProvidersElement.php
+
+		-
+			message: '#^Possibly invalid array key type mixed\.$#'
+			identifier: array.invalidKey
+			count: 1
+			path: ../Classes/Backend/Form/RenderType/Oauth2ProvidersElement.php
+
+		-
+			message: '#^Possibly invalid array key type mixed\.$#'
+			identifier: offsetAccess.invalidOffset
+			count: 2
+			path: ../Classes/Backend/Form/RenderType/Oauth2ProvidersElement.php
+
+		-
+			message: '#^Cannot access offset ''view'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
 			count: 1
 			path: ../Classes/Backend/LoginProvider/Oauth2LoginProvider.php
 
 		-
-			message: "#^Cannot call method fetchAll\\(\\) on Doctrine\\\\DBAL\\\\Result\\|int\\.$#"
+			message: '#^Method Waldhacker\\Oauth2Client\\Backend\\LoginProvider\\Oauth2LoginProvider\:\:getViewConfiguration\(\) should return array\<string, mixed\> but returns array\<mixed\>\.$#'
+			identifier: return.type
+			count: 1
+			path: ../Classes/Backend/LoginProvider/Oauth2LoginProvider.php
+
+		-
+			message: '#^Method Waldhacker\\Oauth2Client\\Backend\\LoginProvider\\Oauth2LoginProvider\:\:modifyView\(\) should return string but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: ../Classes/Backend/LoginProvider/Oauth2LoginProvider.php
+
+		-
+			message: '#^Parameter \#1 \$layoutRootPaths of method TYPO3Fluid\\Fluid\\View\\TemplatePaths\:\:setLayoutRootPaths\(\) expects array\<string\>, array\<mixed, mixed\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: ../Classes/Backend/LoginProvider/Oauth2LoginProvider.php
+
+		-
+			message: '#^Parameter \#1 \$partialRootPaths of method TYPO3Fluid\\Fluid\\View\\TemplatePaths\:\:setPartialRootPaths\(\) expects array\<string\>, array\<mixed, mixed\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: ../Classes/Backend/LoginProvider/Oauth2LoginProvider.php
+
+		-
+			message: '#^Parameter \#1 \$templateRootPaths of method TYPO3Fluid\\Fluid\\View\\TemplatePaths\:\:setTemplateRootPaths\(\) expects array\<string\>, array\<mixed, mixed\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: ../Classes/Backend/LoginProvider/Oauth2LoginProvider.php
+
+		-
+			message: '#^Parameter \#3 \.\.\.\$arrays of function array_merge expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 3
+			path: ../Classes/Backend/LoginProvider/Oauth2LoginProvider.php
+
+		-
+			message: '#^Cannot access an offset on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: ../Classes/Backend/SiteConfig/ConfiguredFrontendProvidersItemsProcFunc.php
+
+		-
+			message: '#^Cannot call method getIdentifier\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: ../Classes/Backend/SiteConfig/ConfiguredFrontendProvidersItemsProcFunc.php
+
+		-
+			message: '#^Cannot call method getLabel\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: ../Classes/Backend/SiteConfig/ConfiguredFrontendProvidersItemsProcFunc.php
+
+		-
+			message: '#^Cannot cast mixed to int\.$#'
+			identifier: cast.int
+			count: 1
+			path: ../Classes/Backend/UserSettingsModule/ManageProvidersButtonRenderer.php
+
+		-
+			message: '#^Method Waldhacker\\Oauth2Client\\Backend\\UserSettingsModule\\ManageProvidersButtonRenderer\:\:getLanguageService\(\) should return TYPO3\\CMS\\Core\\Localization\\LanguageService but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: ../Classes/Backend/UserSettingsModule/ManageProvidersButtonRenderer.php
+
+		-
+			message: '#^Cannot cast mixed to int\.$#'
+			identifier: cast.int
+			count: 1
+			path: ../Classes/Controller/Backend/ManageProvidersController.php
+
+		-
+			message: '#^Method Waldhacker\\Oauth2Client\\Controller\\Backend\\ManageProvidersController\:\:getLanguageService\(\) should return TYPO3\\CMS\\Core\\Localization\\LanguageService but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: ../Classes/Controller/Backend/ManageProvidersController.php
+
+		-
+			message: '#^Cannot cast mixed to string\.$#'
+			identifier: cast.string
+			count: 1
+			path: ../Classes/Controller/Backend/Registration/AuthorizeController.php
+
+		-
+			message: '#^Cannot cast mixed to string\.$#'
+			identifier: cast.string
+			count: 4
+			path: ../Classes/Controller/Backend/Registration/VerifyController.php
+
+		-
+			message: '#^Method Waldhacker\\Oauth2Client\\Controller\\Backend\\Registration\\VerifyController\:\:getLanguageService\(\) should return TYPO3\\CMS\\Core\\Localization\\LanguageService but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: ../Classes/Controller/Backend/Registration/VerifyController.php
+
+		-
+			message: '#^Cannot cast mixed to int\.$#'
+			identifier: cast.int
+			count: 2
+			path: ../Classes/Controller/Frontend/ManageProvidersController.php
+
+		-
+			message: '#^Cannot access offset ''action'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: ../Classes/Controller/Frontend/RegistrationController.php
+
+		-
+			message: '#^Cannot access offset ''uri'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: ../Classes/Controller/Frontend/RegistrationController.php
+
+		-
+			message: '#^Cannot cast mixed to int\.$#'
+			identifier: cast.int
+			count: 3
+			path: ../Classes/Controller/Frontend/RegistrationController.php
+
+		-
+			message: '#^Cannot cast mixed to string\.$#'
+			identifier: cast.string
+			count: 4
+			path: ../Classes/Controller/Frontend/RegistrationController.php
+
+		-
+			message: '#^Parameter \#1 \$redirectUri of method Waldhacker\\Oauth2Client\\Controller\\Frontend\\RegistrationController\:\:redirectWithWarning\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 6
+			path: ../Classes/Controller/Frontend/RegistrationController.php
+
+		-
+			message: '#^Parameter \#2 \$value of method Psr\\Http\\Message\\MessageInterface\:\:withHeader\(\) expects array\<string\>\|string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: ../Classes/Controller/Frontend/RegistrationController.php
+
+		-
+			message: '#^Binary operation "\." between non\-falsy\-string and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: ../Classes/Database/Query/Restriction/Oauth2BeUserProviderConfigurationRestriction.php
+
+		-
+			message: '#^Cannot access offset ''be_user'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: ../Classes/Database/Query/Restriction/Oauth2BeUserProviderConfigurationRestriction.php
+
+		-
+			message: '#^Cannot access offset ''ctrl'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: ../Classes/Database/Query/Restriction/Oauth2BeUserProviderConfigurationRestriction.php
+
+		-
+			message: '#^Cannot access offset ''enablecolumns'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: ../Classes/Database/Query/Restriction/Oauth2BeUserProviderConfigurationRestriction.php
+
+		-
+			message: '#^Cannot access offset ''tx_oauth2_beuser_provider_configuration'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: ../Classes/Database/Query/Restriction/Oauth2BeUserProviderConfigurationRestriction.php
+
+		-
+			message: '#^Cannot cast mixed to int\.$#'
+			identifier: cast.int
+			count: 1
+			path: ../Classes/Database/Query/Restriction/Oauth2BeUserProviderConfigurationRestriction.php
+
+		-
+			message: '#^Property Waldhacker\\Oauth2Client\\Database\\Query\\Restriction\\Oauth2BeUserProviderConfigurationRestriction\:\:\$isAdmin \(bool\) does not accept mixed\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: ../Classes/Database/Query/Restriction/Oauth2BeUserProviderConfigurationRestriction.php
+
+		-
+			message: '#^Binary operation "\." between non\-falsy\-string and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: ../Classes/Database/Query/Restriction/Oauth2FeUserProviderConfigurationRestriction.php
+
+		-
+			message: '#^Cannot access offset ''ctrl'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: ../Classes/Database/Query/Restriction/Oauth2FeUserProviderConfigurationRestriction.php
+
+		-
+			message: '#^Cannot access offset ''enablecolumns'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: ../Classes/Database/Query/Restriction/Oauth2FeUserProviderConfigurationRestriction.php
+
+		-
+			message: '#^Cannot access offset ''fe_user'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: ../Classes/Database/Query/Restriction/Oauth2FeUserProviderConfigurationRestriction.php
+
+		-
+			message: '#^Cannot access offset ''tx_oauth2_feuser_provider_configuration'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: ../Classes/Database/Query/Restriction/Oauth2FeUserProviderConfigurationRestriction.php
+
+		-
+			message: '#^Cannot cast mixed to int\.$#'
+			identifier: cast.int
+			count: 1
+			path: ../Classes/Database/Query/Restriction/Oauth2FeUserProviderConfigurationRestriction.php
+
+		-
+			message: '#^Parameter \#1 \$request of static method TYPO3\\CMS\\Core\\Http\\ApplicationType\:\:fromRequest\(\) expects Psr\\Http\\Message\\ServerRequestInterface, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: ../Classes/Database/Query/Restriction/Oauth2FeUserProviderConfigurationRestriction.php
+
+		-
+			message: '#^Cannot cast mixed to string\.$#'
+			identifier: cast.string
+			count: 4
+			path: ../Classes/Events/Listener/GenerateRequestTokenListener.php
+
+		-
+			message: '#^Parameter \#1 \$string of function urldecode expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: ../Classes/Frontend/RedirectRequestService.php
+
+		-
+			message: '#^Cannot access offset ''headers'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: ../Classes/Middleware/Frontend/AfterAuthenticationHandler.php
+
+		-
+			message: '#^Cannot access offset ''method'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: ../Classes/Middleware/Frontend/AfterAuthenticationHandler.php
+
+		-
+			message: '#^Cannot access offset ''parsedBody'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: ../Classes/Middleware/Frontend/AfterAuthenticationHandler.php
+
+		-
+			message: '#^Cannot access offset ''protocolVersion'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: ../Classes/Middleware/Frontend/AfterAuthenticationHandler.php
+
+		-
+			message: '#^Cannot access offset ''uri'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 3
+			path: ../Classes/Middleware/Frontend/AfterAuthenticationHandler.php
+
+		-
+			message: '#^Parameter \#1 \$data of method TYPO3\\CMS\\Core\\Http\\ServerRequest\:\:withParsedBody\(\) expects array\|object\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: ../Classes/Middleware/Frontend/AfterAuthenticationHandler.php
+
+		-
+			message: '#^Parameter \#1 \$originalUri of method Waldhacker\\Oauth2Client\\Frontend\\RedirectRequestService\:\:removeOauth2ParametersFromUri\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: ../Classes/Middleware/Frontend/AfterAuthenticationHandler.php
+
+		-
+			message: '#^Parameter \#1 \$uri of class TYPO3\\CMS\\Core\\Http\\ServerRequest constructor expects Psr\\Http\\Message\\UriInterface\|string\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: ../Classes/Middleware/Frontend/AfterAuthenticationHandler.php
+
+		-
+			message: '#^Parameter \#1 \$version of method TYPO3\\CMS\\Core\\Http\\Message\:\:withProtocolVersion\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: ../Classes/Middleware/Frontend/AfterAuthenticationHandler.php
+
+		-
+			message: '#^Parameter \#2 \$normalizedParams of method TYPO3\\CMS\\Core\\Authentication\\AbstractUserAuthentication\:\:appendCookieToResponse\(\) expects TYPO3\\CMS\\Core\\Http\\NormalizedParams, TYPO3\\CMS\\Core\\Http\\NormalizedParams\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: ../Classes/Middleware/Frontend/AfterAuthenticationHandler.php
+
+		-
+			message: '#^Parameter \#4 \$headers of class TYPO3\\CMS\\Core\\Http\\ServerRequest constructor expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: ../Classes/Middleware/Frontend/AfterAuthenticationHandler.php
+
+		-
+			message: '#^Cannot access offset ''action'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: ../Classes/Middleware/Frontend/BeforeAuthenticationHandler.php
+
+		-
+			message: '#^Binary operation "\." between ''config\.'' and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 2
+			path: ../Classes/Repository/BackendUserRepository.php
+
+		-
+			message: '#^Cannot access offset ''be_user'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
 			count: 3
 			path: ../Classes/Repository/BackendUserRepository.php
 
 		-
-			message: "#^Cannot call method fetchAllAssociative\\(\\) on Doctrine\\\\DBAL\\\\Result\\|int\\.$#"
+			message: '#^Cannot access offset ''ctrl'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
 			count: 3
 			path: ../Classes/Repository/BackendUserRepository.php
 
 		-
-			message: "#^Cannot call method fetchAll\\(\\) on Doctrine\\\\DBAL\\\\Result\\|int\\.$#"
+			message: '#^Cannot access offset ''enablecolumns'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 3
+			path: ../Classes/Repository/BackendUserRepository.php
+
+		-
+			message: '#^Cannot access offset ''tx_oauth2_beuser_provider_configuration'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 3
+			path: ../Classes/Repository/BackendUserRepository.php
+
+		-
+			message: '#^Cannot access offset ''uid'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: ../Classes/Repository/BackendUserRepository.php
+
+		-
+			message: '#^Cannot cast mixed to int\.$#'
+			identifier: cast.int
+			count: 1
+			path: ../Classes/Repository/BackendUserRepository.php
+
+		-
+			message: '#^Method Waldhacker\\Oauth2Client\\Repository\\BackendUserRepository\:\:getBackendUser\(\) should return TYPO3\\CMS\\Core\\Authentication\\BackendUserAuthentication but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: ../Classes/Repository/BackendUserRepository.php
+
+		-
+			message: '#^Parameter \#1 \$fieldName of method TYPO3\\CMS\\Core\\Database\\Query\\Expression\\ExpressionBuilder\:\:eq\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: ../Classes/Repository/BackendUserRepository.php
+
+		-
+			message: '#^Parameter \#1 \$keys of function array_combine expects an array of values castable to string, list\<mixed\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: ../Classes/Repository/BackendUserRepository.php
+
+		-
+			message: '#^Parameter \#1 \$keys of function array_combine expects array\<int\|string\>, list\<mixed\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: ../Classes/Repository/BackendUserRepository.php
+
+		-
+			message: '#^Binary operation "\." between ''config\.'' and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 2
+			path: ../Classes/Repository/FrontendUserRepository.php
+
+		-
+			message: '#^Cannot access offset ''ctrl'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 5
+			path: ../Classes/Repository/FrontendUserRepository.php
+
+		-
+			message: '#^Cannot access offset ''enablecolumns'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 5
+			path: ../Classes/Repository/FrontendUserRepository.php
+
+		-
+			message: '#^Cannot access offset ''fe_user'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 5
+			path: ../Classes/Repository/FrontendUserRepository.php
+
+		-
+			message: '#^Cannot access offset ''tx_oauth2_feuser_provider_configuration'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 5
+			path: ../Classes/Repository/FrontendUserRepository.php
+
+		-
+			message: '#^Parameter \#1 \$callback of function array_map expects \(callable\(mixed\)\: mixed\)\|null, ''intval'' given\.$#'
+			identifier: argument.type
+			count: 2
+			path: ../Classes/Repository/FrontendUserRepository.php
+
+		-
+			message: '#^Parameter \#1 \$fieldName of method TYPO3\\CMS\\Core\\Database\\Query\\Expression\\ExpressionBuilder\:\:eq\(\) expects string, mixed given\.$#'
+			identifier: argument.type
 			count: 3
 			path: ../Classes/Repository/FrontendUserRepository.php
 
 		-
-			message: "#^Cannot call method fetchAllAssociative\\(\\) on Doctrine\\\\DBAL\\\\Result\\|int\\.$#"
-			count: 3
+			message: '#^Parameter \#1 \$keys of function array_combine expects an array of values castable to string, list\<mixed\> given\.$#'
+			identifier: argument.type
+			count: 1
 			path: ../Classes/Repository/FrontendUserRepository.php
 
 		-
-			message: "#^Parameter \\#1 \\$session of method TYPO3\\\\CMS\\\\Core\\\\Session\\\\UserSessionManager\\:\\:fixateAnonymousSession\\(\\) expects TYPO3\\\\CMS\\\\Core\\\\Session\\\\UserSession, TYPO3\\\\CMS\\\\Core\\\\Session\\\\UserSession\\|Waldhacker\\\\Oauth2Client\\\\Session\\\\v10\\\\UserSession given\\.$#"
+			message: '#^Parameter \#1 \$keys of function array_combine expects array\<int\|string\>, list\<mixed\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: ../Classes/Repository/FrontendUserRepository.php
+
+		-
+			message: '#^Cannot access offset ''collaborators'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: ../Classes/Service/Oauth2ProviderManager.php
+
+		-
+			message: '#^Cannot access offset ''description'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: ../Classes/Service/Oauth2ProviderManager.php
+
+		-
+			message: '#^Cannot access offset ''iconIdentifier'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: ../Classes/Service/Oauth2ProviderManager.php
+
+		-
+			message: '#^Cannot access offset ''implementationClassName'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: ../Classes/Service/Oauth2ProviderManager.php
+
+		-
+			message: '#^Cannot access offset ''label'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: ../Classes/Service/Oauth2ProviderManager.php
+
+		-
+			message: '#^Cannot access offset ''options'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: ../Classes/Service/Oauth2ProviderManager.php
+
+		-
+			message: '#^Cannot access offset ''providers'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: ../Classes/Service/Oauth2ProviderManager.php
+
+		-
+			message: '#^Cannot access offset ''scopes'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: ../Classes/Service/Oauth2ProviderManager.php
+
+		-
+			message: '#^Parameter \#1 \$callback of function array_map expects \(callable\(mixed\)\: mixed\)\|null, ''strval'' given\.$#'
+			identifier: argument.type
+			count: 1
+			path: ../Classes/Service/Oauth2ProviderManager.php
+
+		-
+			message: '#^Parameter \#1 \$key of function array_key_exists expects int\|string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: ../Classes/Service/Oauth2ProviderManager.php
+
+		-
+			message: '#^Parameter \#2 \$array of function array_map expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: ../Classes/Service/Oauth2ProviderManager.php
+
+		-
+			message: '#^Parameter \#2 \$callback of function array_filter expects \(callable\(mixed\)\: bool\)\|null, Closure\(Waldhacker\\Oauth2Client\\Domain\\Model\\ProviderConfiguration\)\: bool given\.$#'
+			identifier: argument.type
+			count: 3
+			path: ../Classes/Service/Oauth2ProviderManager.php
+
+		-
+			message: '#^Parameter \#2 \$label of class Waldhacker\\Oauth2Client\\Domain\\Model\\ProviderConfiguration constructor expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: ../Classes/Service/Oauth2ProviderManager.php
+
+		-
+			message: '#^Parameter \#3 \$description of class Waldhacker\\Oauth2Client\\Domain\\Model\\ProviderConfiguration constructor expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: ../Classes/Service/Oauth2ProviderManager.php
+
+		-
+			message: '#^Parameter \#4 \$iconIdentifier of class Waldhacker\\Oauth2Client\\Domain\\Model\\ProviderConfiguration constructor expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: ../Classes/Service/Oauth2ProviderManager.php
+
+		-
+			message: '#^Parameter \#5 \$implementationClassName of class Waldhacker\\Oauth2Client\\Domain\\Model\\ProviderConfiguration constructor expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: ../Classes/Service/Oauth2ProviderManager.php
+
+		-
+			message: '#^Parameter \#7 \$options of class Waldhacker\\Oauth2Client\\Domain\\Model\\ProviderConfiguration constructor expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: ../Classes/Service/Oauth2ProviderManager.php
+
+		-
+			message: '#^Parameter \#8 \$collaborators of class Waldhacker\\Oauth2Client\\Domain\\Model\\ProviderConfiguration constructor expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: ../Classes/Service/Oauth2ProviderManager.php
+
+		-
+			message: '#^Parameter \#1 \$string of function trim expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: ../Classes/Service/SiteService.php
+
+		-
+			message: '#^Call to function is_string\(\) with string will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 3
+			path: ../Classes/Session/SessionManager.php
+
+		-
+			message: '#^Cannot access offset ''SYS'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
 			count: 1
 			path: ../Classes/Session/SessionManager.php
 
 		-
-			message: "#^Parameter \\#1 \\$session of method TYPO3\\\\CMS\\\\Core\\\\Session\\\\UserSessionManager\\:\\:isSessionPersisted\\(\\) expects TYPO3\\\\CMS\\\\Core\\\\Session\\\\UserSession, TYPO3\\\\CMS\\\\Core\\\\Session\\\\UserSession\\|Waldhacker\\\\Oauth2Client\\\\Session\\\\v10\\\\UserSession given\\.$#"
+			message: '#^Cannot access offset ''cookieDomain'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
 			count: 2
 			path: ../Classes/Session/SessionManager.php
 
 		-
-			message: "#^Parameter \\#1 \\$session of method TYPO3\\\\CMS\\\\Core\\\\Session\\\\UserSessionManager\\:\\:removeSession\\(\\) expects TYPO3\\\\CMS\\\\Core\\\\Session\\\\UserSession, TYPO3\\\\CMS\\\\Core\\\\Session\\\\UserSession\\|Waldhacker\\\\Oauth2Client\\\\Session\\\\v10\\\\UserSession given\\.$#"
+			message: '#^Cannot access offset ''cookieSameSite'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
 			count: 1
 			path: ../Classes/Session/SessionManager.php
 
 		-
-			message: "#^Parameter \\#1 \\$session of method TYPO3\\\\CMS\\\\Core\\\\Session\\\\UserSessionManager\\:\\:updateSession\\(\\) expects TYPO3\\\\CMS\\\\Core\\\\Session\\\\UserSession, TYPO3\\\\CMS\\\\Core\\\\Session\\\\UserSession\\|Waldhacker\\\\Oauth2Client\\\\Session\\\\v10\\\\UserSession given\\.$#"
+			message: '#^Cannot access offset string on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: ../Classes/Session/SessionManager.php
+
+		-
+			message: '#^Cannot cast mixed to string\.$#'
+			identifier: cast.string
+			count: 2
+			path: ../Classes/Session/SessionManager.php
+
+		-
+			message: '#^Method Waldhacker\\Oauth2Client\\Session\\SessionManager\:\:getUserSession\(\) should return TYPO3\\CMS\\Core\\Session\\UserSession but returns mixed\.$#'
+			identifier: return.type
 			count: 1
 			path: ../Classes/Session/SessionManager.php
 
 		-
-			message: "#^Comparison operation \"\\>\" between int\\<2, max\\> and 0 is always true\\.$#"
+			message: '#^Method Waldhacker\\Oauth2Client\\Session\\SessionManager\:\:getUserSessionManager\(\) should return TYPO3\\CMS\\Core\\Session\\UserSessionManager but returns mixed\.$#'
+			identifier: return.type
 			count: 1
-			path: ../Classes/Session/v10/UserSessionManager.php
+			path: ../Classes/Session/SessionManager.php
 
+		-
+			message: '#^Parameter \#1 \$string of function strtolower expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: ../Classes/Session/SessionManager.php

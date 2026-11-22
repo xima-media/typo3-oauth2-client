@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Waldhacker\Oauth2Client\Domain\Model;
 
-use InvalidArgumentException;
 use League\OAuth2\Client\Provider\AbstractProvider;
 
 class ProviderConfiguration
@@ -23,7 +22,7 @@ class ProviderConfiguration
             !class_exists($this->implementationClassName)
             || !is_a($this->implementationClassName, AbstractProvider::class, true)
         ) {
-            throw new InvalidArgumentException(
+            throw new \InvalidArgumentException(
                 'Registered class ' . $this->implementationClassName
                 . ' does not exist or is not an implementation of ' . AbstractProvider::class,
                 1642867945

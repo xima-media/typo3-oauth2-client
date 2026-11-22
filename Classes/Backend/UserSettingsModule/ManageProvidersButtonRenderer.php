@@ -28,8 +28,7 @@ class ManageProvidersButtonRenderer
         private readonly Oauth2ProviderManager $oauth2ProviderManager,
         private readonly IconFactory $iconFactory,
         private readonly Context $context,
-    ) {
-    }
+    ) {}
 
     /**
      * @throws AspectNotFoundException

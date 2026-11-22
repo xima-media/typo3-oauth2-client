@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace Waldhacker\Oauth2Client\Repository;
 
-use DateTime;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\ParameterType;
-use InvalidArgumentException;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use Waldhacker\Oauth2Client\Backend\DataHandling\DataHandlerHook;
 use Waldhacker\Oauth2Client\Database\Query\Restriction\Oauth2FeUserProviderConfigurationRestriction;
@@ -19,8 +17,7 @@ class FrontendUserRepository
 
     public function __construct(
         private readonly ConnectionPool $connectionPool
-    ) {
-    }
+    ) {}
 
     /**
      * @throws Exception
@@ -63,13 +60,13 @@ class FrontendUserRepository
     public function persistIdentityForUser(string $provider, string $identifier, int $userid): void
     {
         if (empty($provider)) {
-            throw new InvalidArgumentException('"provider" must not be empty', 1642867960);
+            throw new \InvalidArgumentException('"provider" must not be empty', 1642867960);
         }
         if (empty($identifier)) {
-            throw new InvalidArgumentException('"identifier" must not be empty', 1642867961);
+            throw new \InvalidArgumentException('"identifier" must not be empty', 1642867961);
         }
 
-        $now = new DateTime();
+        $now = new \DateTime();
         $userWithEditRightsColumn = $GLOBALS['TCA'][
             self::OAUTH2_FE_CONFIG_TABLE
         ]['ctrl']['enablecolumns']['fe_user'] ?? 'parentid';
@@ -121,7 +118,7 @@ class FrontendUserRepository
     /**
      * @throws Exception
      */
-    public function getActiveProviders($userid): array
+    public function getActiveProviders(int $userid): array
     {
         $userWithEditRightsColumn = $GLOBALS['TCA'][
             self::OAUTH2_FE_CONFIG_TABLE

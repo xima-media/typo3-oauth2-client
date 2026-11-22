@@ -21,8 +21,7 @@ class Oauth2ProvidersElement extends AbstractFormElement
         protected IconFactory $iconFactory,
         private readonly UriBuilder $uriBuilder,
         private readonly Oauth2ProviderManager $oauth2ProviderManager,
-    ) {
-    }
+    ) {}
 
     /**
      * @throws RouteNotFoundException

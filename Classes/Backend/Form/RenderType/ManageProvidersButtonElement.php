@@ -11,7 +11,6 @@ use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Context\Exception\AspectNotFoundException;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Imaging\IconSize;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use Waldhacker\Oauth2Client\Repository\BackendUserRepository;
 use Waldhacker\Oauth2Client\Service\Oauth2ProviderManager;
 
@@ -21,15 +20,13 @@ use Waldhacker\Oauth2Client\Service\Oauth2ProviderManager;
  */
 class ManageProvidersButtonElement extends AbstractFormElement
 {
-
     public function __construct(
         protected IconFactory $iconFactory,
         private readonly UriBuilder $uriBuilder,
         private readonly BackendUserRepository $backendUserRepository,
         private readonly Oauth2ProviderManager $oauth2ProviderManager,
         private readonly Context $context
-    ) {
-    }
+    ) {}
 
     /**
      * @return array<string, mixed>

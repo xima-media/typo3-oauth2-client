@@ -40,8 +40,7 @@ class RegistrationController implements LoggerAwareInterface
         private readonly SiteService $siteService,
         private readonly ResponseFactoryInterface $responseFactory,
         private readonly Context $context
-    ) {
-    }
+    ) {}
 
     /**
      * @throws SessionNotCreatedException
@@ -165,7 +164,7 @@ class RegistrationController implements LoggerAwareInterface
             [
                 'oauth2-provider' => $providerId,
                 'tx_oauth2client' => [
-                    'action' => 'verify'
+                    'action' => 'verify',
                 ],
             ],
             $request

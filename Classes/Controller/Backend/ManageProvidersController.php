@@ -28,8 +28,7 @@ readonly class ManageProvidersController
         private IconFactory $iconFactory,
         private ModuleTemplateFactory $moduleTemplateFactory,
         private Context $context,
-    ) {
-    }
+    ) {}
 
     /**
      * @throws AspectNotFoundException
@@ -43,7 +42,7 @@ readonly class ManageProvidersController
         $userid = (int)$this->context->getPropertyFromAspect('backend.user', 'id');
         $moduleTemplate->assignMultiple([
             'providers' => $this->oauth2ProviderManager->getConfiguredBackendProviders(),
-            'activeProviders' => $this->backendUserRepository->getActiveProviders($userid)
+            'activeProviders' => $this->backendUserRepository->getActiveProviders($userid),
         ]);
         return $moduleTemplate->renderResponse('Backend/ManageProviders');
     }

@@ -21,7 +21,6 @@ use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Session\Backend\Exception\SessionNotCreatedException;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use Waldhacker\Oauth2Client\Controller\Backend\AbstractBackendController;
 use Waldhacker\Oauth2Client\Repository\BackendUserRepository;
 use Waldhacker\Oauth2Client\Service\Oauth2ProviderManager;
 use Waldhacker\Oauth2Client\Service\Oauth2Service;
@@ -37,8 +36,7 @@ readonly class VerifyController
         private ResponseFactoryInterface $responseFactory,
         private Oauth2ProviderManager $oauth2ProviderManager,
         private Context $context
-    ) {
-    }
+    ) {}
 
     /**
      * @throws AspectNotFoundException

@@ -40,8 +40,7 @@ class AuthorizeController implements LoggerAwareInterface
         private readonly ResponseFactoryInterface $responseFactory,
         private readonly Context $context,
         private readonly ViewFactoryInterface $viewFactory,
-    ) {
-    }
+    ) {}
 
     /**
      * @throws SessionNotCreatedException

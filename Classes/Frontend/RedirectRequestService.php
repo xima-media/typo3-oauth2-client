@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Waldhacker\Oauth2Client\Frontend;
 
-use Exception;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Configuration\Features;
 use TYPO3\CMS\Core\Http\Uri;
@@ -14,9 +13,7 @@ class RedirectRequestService
 {
     private const REDIRECT_URI_QUERY_NAME = 'after-oauth2-redirect-uri';
 
-    public function __construct(private readonly SiteService $siteService, private readonly Features $features)
-    {
-    }
+    public function __construct(private readonly SiteService $siteService, private readonly Features $features) {}
 
     public function buildOriginalRequestData(ServerRequestInterface $request, bool $tryOverrideFromQuery = false): array
     {
@@ -35,7 +32,7 @@ class RedirectRequestService
 
         try {
             $redirectUri = new Uri(urldecode($mergedRequestedParameters[self::REDIRECT_URI_QUERY_NAME]));
-        } catch (Exception) {
+        } catch (\Exception) {
             return $this->buildOriginalRequestDataFromCurrentRequest($request);
         }
 
@@ -56,7 +53,7 @@ class RedirectRequestService
     {
         try {
             $uri = new Uri($originalUri);
-        } catch (Exception) {
+        } catch (\Exception) {
             return $originalUri;
         }
 
