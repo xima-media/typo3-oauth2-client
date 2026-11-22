@@ -46,7 +46,7 @@
         "typo3/cms-frontend": "^13.4@dev || ^14.2@dev",
         "typo3/cms-install": "^13.4@dev || ^14.2@dev",
         "typo3/coding-standards": "^0.8.0",
-        "typo3/testing-framework": "^8.0.9 || ^9.0",
+        "typo3/testing-framework": "^8.2 || ^9.0",
         "vimeo/psalm": "^5.0 || ^6.0"
     },
     "suggest": {
@@ -116,6 +116,8 @@
         ],
         "ci:stan:gen-baseline": [
             "phpstan analyze --configuration build/phpstan.neon --generate-baseline build/phpstan.baseline.neon"
-        ]
+        ],
+        "test:functional": "phpunit -c phpunit.functional.xml",
+        "test:unit": "phpunit -c phpunit.unit.xml"
     }
 }
