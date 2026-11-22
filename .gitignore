@@ -7,6 +7,11 @@ composer.lock
 .phpunit.cache
 Documentation-GENERATED-temp
 .idea
-var
-config
+/config
+/public
+/var
+/vendor
 extension/
+node_modules
+Tests/Playwright/playwright-report
+Tests/Playwright/test-results
