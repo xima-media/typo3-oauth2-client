@@ -30,6 +30,17 @@ jobs:
           ddev composer config github-oauth.github.com ${{ secrets.GITHUB_TOKEN }}
           ddev composer install --no-progress
 
+      # TER releases ship Resources/Private/Libs for classic mode, so it must match composer.json
+      - name: Check bundled libraries
+        run: |
+          ddev composer libs:bundle
+          if [ -n "$(git status --porcelain -- composer.json Resources/Private/Libs)" ]; then
+            git status --short -- composer.json Resources/Private/Libs
+            git diff -- composer.json
+            echo "::error::Bundled libraries are outdated. Run 'composer libs:bundle' and commit the result."
+            exit 1
+          fi
+
       - name: Composer audit
         run: ddev composer audit --abandoned=report
 

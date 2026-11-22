@@ -36,5 +36,6 @@ return [
         'phpunit.result.cache',
         'phpunit.unit.xml',
         'playwright.config.cts',
+        'typo3-vendor-bundler.yaml',
     ],
 ];

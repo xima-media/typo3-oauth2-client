@@ -35,6 +35,7 @@
         "typo3/cms-setup": "^13.4 || ^14.3"
     },
     "require-dev": {
+        "eliashaeussler/typo3-vendor-bundler": "^4.1",
         "ergebnis/composer-normalize": "^2.23",
         "friendsofphp/php-cs-fixer": "^3.0",
         "phpstan/extension-installer": "^1.0",
@@ -54,7 +55,12 @@
     "prefer-stable": true,
     "autoload": {
         "psr-4": {
-            "Waldhacker\\Oauth2Client\\": "Classes/"
+            "League\\OAuth2\\Client\\": [
+                "Resources/Private/Libs/vendor/league/oauth2-client/src"
+            ],
+            "Waldhacker\\Oauth2Client\\": [
+                "Classes"
+            ]
         }
     },
     "autoload-dev": {
@@ -65,6 +71,7 @@
     "config": {
         "allow-plugins": {
             "composer/package-versions-deprecated": true,
+            "eliashaeussler/typo3-vendor-bundler": true,
             "ergebnis/composer-normalize": true,
             "phpstan/extension-installer": true,
             "typo3/class-alias-loader": true,
@@ -80,7 +87,15 @@
             "indent-style": "space"
         },
         "typo3/cms": {
+            "Package": {
+                "providesPackages": {
+                    "league/oauth2-client": ""
+                }
+            },
             "extension-key": "oauth2_client",
+            "vendor-libraries": {
+                "root-path": "Resources/Private/Libs"
+            },
             "web-dir": "public"
         }
     },
@@ -100,6 +115,11 @@
         ],
         "ci:yaml:lint": "find . ! -path './vendor/*' ! -path './public/*' ! -path './var/*' ! -path '*/node_modules/*' \\( -name '*.yaml' -o -name '*.yml' \\) -print0 | xargs -0 -r yaml-lint",
         "composer:normalize": "@composer normalize --no-check-lock",
+        "libs:bundle": [
+            "@composer extract-dependencies --dump-to-file --fail",
+            "@composer bundle",
+            "@composer:normalize"
+        ],
         "php:fixer": "php-cs-fixer fix --config build/phpcs.dist",
         "php:stan:baseline": "phpstan analyse --configuration build/phpstan.neon --no-progress --generate-baseline build/phpstan.baseline.neon",
         "test:functional": "phpunit -c phpunit.functional.xml",

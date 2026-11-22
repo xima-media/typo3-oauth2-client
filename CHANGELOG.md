@@ -23,6 +23,8 @@
 
 * Run tests and static code analysis on GitHub Actions; remove the outdated CI and TER publish workflows [Maik Schneider]
 
+* Bundle `league/oauth2-client` in the TER package with `eliashaeussler/typo3-vendor-bundler`; CI checks that the bundle matches `composer.json` [Maik Schneider]
+
 
 ## 4.0.0 (2025-02-12)
 

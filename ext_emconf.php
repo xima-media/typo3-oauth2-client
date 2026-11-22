@@ -19,9 +19,4 @@ $EM_CONF[$_EXTKEY] = [
             'typo3' => '13.4.0-14.4.99',
         ],
     ],
-    'autoload' => [
-        'psr-4' => [
-            'Waldhacker\\Oauth2Client\\' => 'Classes',
-        ],
-    ],
 ];

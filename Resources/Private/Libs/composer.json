@@ -1,0 +1,21 @@
+{
+    "name": "co-stack/typo3-oauth2-client-libs",
+    "config": {
+        "allow-plugins": false,
+        "lock": false
+    },
+    "require": {
+        "league/oauth2-client": "2.10.0"
+    },
+    "provide": {
+        "guzzlehttp/guzzle": "*",
+        "guzzlehttp/promises": "*",
+        "guzzlehttp/psr7": "*",
+        "psr/http-client": "*",
+        "psr/http-factory": "*",
+        "psr/http-message": "*",
+        "symfony/deprecation-contracts": "*",
+        "symfony/polyfill-php80": "*",
+        "symfony/polyfill-php82": "*"
+    }
+}

@@ -26,3 +26,6 @@ bin/* text eol=lf
 .editorconfig export-ignore
 /build/ export-ignore
 /Tests/ export-ignore
+/typo3-vendor-bundler.yaml export-ignore
+# Bundled libraries are for TER (classic mode) only, Composer installs league/oauth2-client itself
+/Resources/Private/Libs/ export-ignore
