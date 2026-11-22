@@ -13,7 +13,7 @@ Require the extension with composer:
 
 .. code-block:: bash
 
-   composer require waldhacker/typo3-oauth2-client
+   composer require co-stack/typo3-oauth2-client
 
 Activate it either via command line or in the extension manager
 

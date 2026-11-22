@@ -19,9 +19,10 @@
             "role": "Developer"
         }
     ],
-    "homepage": "https://gitlab.com/co-stack.com/co-stack.com/typo3-extensions/typo3-oauth2-client",
+    "homepage": "https://github.com/xima-media/typo3-oauth2-client",
     "support": {
-        "issues": "https://gitlab.com/co-stack.com/co-stack.com/typo3-extensions/typo3-oauth2-client/-/issues"
+        "issues": "https://github.com/xima-media/typo3-oauth2-client/issues",
+        "source": "https://github.com/xima-media/typo3-oauth2-client"
     },
     "require": {
         "php": "^8.2",
