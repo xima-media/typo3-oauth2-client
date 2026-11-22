@@ -1,9 +1,7 @@
 .build/
 composer.lock
-.phplint-cache
 .php_cs.cache
 .php-cs-fixer.cache
-.phplint.cache
 .phpunit.cache
 Documentation-GENERATED-temp
 .idea

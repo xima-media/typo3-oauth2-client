@@ -36,7 +36,6 @@
     "require-dev": {
         "ergebnis/composer-normalize": "^2.23",
         "friendsofphp/php-cs-fixer": "^3.0",
-        "overtrue/phplint": "^9.2",
         "phpstan/extension-installer": "^1.0",
         "saschaegerer/phpstan-typo3": "@dev",
         "symfony/yaml": "^6.4 || ^7.0",
@@ -46,8 +45,7 @@
         "typo3/cms-frontend": "^13.4@dev || ^14.2@dev",
         "typo3/cms-install": "^13.4@dev || ^14.2@dev",
         "typo3/coding-standards": "^0.8.0",
-        "typo3/testing-framework": "^8.2 || ^9.0",
-        "vimeo/psalm": "^5.0 || ^6.0"
+        "typo3/testing-framework": "^8.2 || ^9.0"
     },
     "suggest": {
         "league/oauth2-github": "Github Authentication"
@@ -87,36 +85,23 @@
         }
     },
     "scripts": {
-        "ci:cgl:check": [
-            "php-cs-fixer fix --config build/phpcs.dist -v --dry-run"
+        "ci:composer:normalize": "@composer normalize --no-check-lock --dry-run",
+        "ci:composer:validate": "@composer validate --no-check-lock",
+        "ci:php:fixer": "php-cs-fixer fix --config build/phpcs.dist --dry-run --diff",
+        "ci:php:lint": "find . -name '*.php' ! -path './vendor/*' ! -path './public/*' ! -path './var/*' ! -path '*/node_modules/*' -print0 | xargs -0 -n 1 -P 4 php -l",
+        "ci:php:stan": "phpstan analyse --configuration build/phpstan.neon --no-progress",
+        "ci:sca": [
+            "@ci:composer:validate",
+            "@ci:composer:normalize",
+            "@ci:php:lint",
+            "@ci:php:fixer",
+            "@ci:php:stan",
+            "@ci:yaml:lint"
         ],
-        "ci:cgl:fix": [
-            "php-cs-fixer fix --config build/phpcs.dist"
-        ],
-        "ci:lint:php": [
-            "phplint -c build/phplint.yaml"
-        ],
-        "ci:lint:yaml": [
-            "php build/yaml-lint.php Configuration/"
-        ],
-        "ci:normalize:check": [
-            "@composer normalize --dry-run"
-        ],
-        "ci:normalize:fix": [
-            "@composer normalize"
-        ],
-        "ci:psalm": [
-            "psalm --config=build/psalm.xml"
-        ],
-        "ci:psalm:gen-baseline": [
-            "psalm -c build/psalm.xml --set-baseline=build/psalm-baseline.xml"
-        ],
-        "ci:stan": [
-            "phpstan analyze --configuration build/phpstan.neon"
-        ],
-        "ci:stan:gen-baseline": [
-            "phpstan analyze --configuration build/phpstan.neon --generate-baseline build/phpstan.baseline.neon"
-        ],
+        "ci:yaml:lint": "find . ! -path './vendor/*' ! -path './public/*' ! -path './var/*' ! -path '*/node_modules/*' \\( -name '*.yaml' -o -name '*.yml' \\) -print0 | xargs -0 -r yaml-lint",
+        "composer:normalize": "@composer normalize --no-check-lock",
+        "php:fixer": "php-cs-fixer fix --config build/phpcs.dist",
+        "php:stan:baseline": "phpstan analyse --configuration build/phpstan.neon --no-progress --generate-baseline build/phpstan.baseline.neon",
         "test:functional": "phpunit -c phpunit.functional.xml",
         "test:unit": "phpunit -c phpunit.unit.xml"
     }
