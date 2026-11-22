@@ -22,8 +22,9 @@ ExtensionManagementUtility::addToAllTCAtypes('be_users', 'tx_oauth2_client_confi
 $version = VersionNumberUtility::convertVersionStringToArray(VersionNumberUtility::getNumericTypo3Version());
 if ($version['version_main'] >= 14) {
     // TYPO3 v14 renders user settings through FormEngine (see ManageProvidersButtonElement).
+    // The name must not match a be_users column: the user settings module saves those as admin.
     ExtensionManagementUtility::addUserSetting(
-        'tx_oauth2_client_configs',
+        'oauth2_providers',
         [
             'label' => 'LLL:EXT:oauth2_client/Resources/Private/Language/locallang_be.xlf:userSettings.label',
             'config' => [
