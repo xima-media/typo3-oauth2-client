@@ -1,7 +1,13 @@
 includes:
 	- phpstan.baseline.neon
 parameters:
-	checkMissingIterableValueType: false
 	level: max
 	paths:
 		- ../Classes
+	ignoreErrors:
+		- identifier: missingType.iterableValue
+	typo3:
+		requestGetAttributeMapping:
+			oauth2.code: mixed
+			oauth2.requestedProvider: mixed
+			oauth2.state: mixed

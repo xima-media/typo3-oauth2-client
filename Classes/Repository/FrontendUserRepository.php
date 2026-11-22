@@ -118,7 +118,7 @@ class FrontendUserRepository
     /**
      * @throws Exception
      */
-    public function getActiveProviders($userid): array
+    public function getActiveProviders(int $userid): array
     {
         $userWithEditRightsColumn = $GLOBALS['TCA'][
             self::OAUTH2_FE_CONFIG_TABLE

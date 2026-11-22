@@ -115,7 +115,7 @@ class SessionManager
         return $cookieName . '_oauth2';
     }
 
-    private function getUserSession(string $requestType, ServerRequestInterface $request): ?UserSession
+    private function getUserSession(string $requestType, ServerRequestInterface $request): UserSession
     {
         if ($this->userSessions[$requestType] === null) {
             $this->userSessions[$requestType] = $this->createUserSession($requestType, $request);
@@ -129,7 +129,7 @@ class SessionManager
             ->createFromRequestOrAnonymous($request, $this->getOAuth2CookieName($request));
     }
 
-    private function getUserSessionManager(string $requestType): ?UserSessionManager
+    private function getUserSessionManager(string $requestType): UserSessionManager
     {
         if ($this->userSessionManagers[$requestType] === null) {
             $this->userSessionManagers[$requestType] = $this->createUserSessionManager($requestType);

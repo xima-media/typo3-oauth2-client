@@ -40,7 +40,6 @@ class ManageProvidersController extends ActionController
      */
     public function listAction(): ?ResponseInterface
     {
-        /** @var ServerRequestInterface $serverRequest */
         $serverRequest = $this->request;
         /** @var UserAspect $frontendUser */
         $frontendUser = $this->context->getAspect('frontend.user');
