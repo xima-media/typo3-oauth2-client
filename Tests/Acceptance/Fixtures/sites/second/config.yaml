@@ -1,0 +1,16 @@
+base: 'http://%env(DDEV_HOSTNAME)%/second/'
+rootPageId: 20
+websiteTitle: 'OAuth2 Client (no storage pid)'
+dependencies:
+  - typo3/fluid-styled-content
+  - typo3/felogin
+enabled_oauth2_providers: mock
+languages:
+  -
+    title: English
+    enabled: true
+    languageId: 0
+    base: /
+    locale: en_US.UTF-8
+    navigationTitle: English
+    flag: us
