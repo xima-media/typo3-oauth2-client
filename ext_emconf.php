@@ -15,8 +15,11 @@ $EM_CONF[$_EXTKEY] = [
         'depends' => [
             'backend' => '13.4.0-14.4.99',
             'fluid' => '13.4.0-14.4.99',
-            'setup' => '13.4.0-14.4.99',
             'typo3' => '13.4.0-14.4.99',
+        ],
+        // EXT:setup is part of EXT:backend since TYPO3 14.3
+        'suggests' => [
+            'setup' => '13.4.0-13.4.99',
         ],
     ],
 ];

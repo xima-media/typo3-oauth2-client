@@ -15,6 +15,8 @@
 
 * Keep frontend logins started by a link working on TYPO3 v14 [Maik Schneider]
 
+* Allow installations without Composer on TYPO3 v14.3, where EXT:setup is part of EXT:backend [Maik Schneider]
+
 ### Tasks
 
 * TYPO3 v14 compatibility (13.4 and 14.3) [Maik Schneider]
