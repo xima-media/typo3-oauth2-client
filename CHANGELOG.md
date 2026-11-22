@@ -9,6 +9,8 @@
 
 * Remove the upgrade wizard that renamed the 1.x table `tx_oauth2_client_configs`: update 1.x installations to 4.x and run its wizard first [Maik Schneider]
 
+* Suggest `typo3/cms-setup` instead of requiring it: Composer installations on TYPO3 13.4 need it to manage providers in the user settings [Maik Schneider]
+
 ### Bugfixes
 
 * Register the "manage providers" user setting under its own name, so saving user settings on TYPO3 v14 cannot move another user's identity [Maik Schneider]

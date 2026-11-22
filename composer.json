@@ -31,8 +31,7 @@
         "psr/log": "*",
         "typo3/cms-backend": "^13.4 || ^14.3",
         "typo3/cms-core": "^13.4 || ^14.3",
-        "typo3/cms-fluid": "^13.4 || ^14.3",
-        "typo3/cms-setup": "^13.4 || ^14.3"
+        "typo3/cms-fluid": "^13.4 || ^14.3"
     },
     "require-dev": {
         "eliashaeussler/typo3-vendor-bundler": "^4.1",
@@ -46,11 +45,13 @@
         "typo3/cms-fluid-styled-content": "^13.4 || ^14.3",
         "typo3/cms-frontend": "^13.4 || ^14.3",
         "typo3/cms-install": "^13.4 || ^14.3",
+        "typo3/cms-setup": "^13.4 || ^14.3",
         "typo3/coding-standards": "^0.8.0",
         "typo3/testing-framework": "^8.2 || ^9.0"
     },
     "suggest": {
-        "league/oauth2-github": "Github Authentication"
+        "league/oauth2-github": "Github Authentication",
+        "typo3/cms-setup": "Required on TYPO3 13.4 to manage providers in the user settings (part of typo3/cms-backend since 14.3)"
     },
     "prefer-stable": true,
     "autoload": {
