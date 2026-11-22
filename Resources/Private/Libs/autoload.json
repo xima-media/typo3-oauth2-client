@@ -1,0 +1,10 @@
+{
+    "psr-4": {
+        "Waldhacker\\Oauth2Client\\": [
+            "Classes"
+        ],
+        "League\\OAuth2\\Client\\": [
+            "Resources/Private/Libs/vendor/league/oauth2-client/src"
+        ]
+    }
+}
