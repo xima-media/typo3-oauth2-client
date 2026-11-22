@@ -4,4 +4,6 @@ cache: .phplint.cache
 extensions:
     - php
 exclude:
-    - .build
+    - public
+    - var
+    - vendor

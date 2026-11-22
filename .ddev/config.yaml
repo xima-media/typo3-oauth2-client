@@ -1,0 +1,12 @@
+name: oauth2-client
+type: typo3
+docroot: public
+php_version: "8.4"
+webserver_type: nginx-fpm
+database:
+  type: mariadb
+  version: "10.11"
+omit_containers: [ddev-ssh-agent]
+disable_settings_management: true
+web_environment:
+  - TYPO3_CONTEXT=Development/DDEV

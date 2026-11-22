@@ -1,0 +1,23 @@
+"pages"
+,"uid","pid","title","doktype","module"
+,1,0,"Frontend users",254,"fe_users"
+"be_groups"
+,"uid","pid","title","tables_select","tables_modify"
+,1,0,"Editors","",""
+,2,0,"Frontend identity editors","tx_oauth2_feuser_provider_configuration","tx_oauth2_feuser_provider_configuration"
+"be_users"
+,"uid","pid","username","admin","usergroup","tx_oauth2_client_configs"
+,1,0,"admin",1,"",0
+,2,0,"editor",0,"1",1
+,3,0,"colleague",0,"1",1
+,4,0,"frontend-identity-editor",0,"2",0
+"tx_oauth2_beuser_provider_configuration"
+,"uid","pid","parentid","provider","identifier"
+,1,0,3,"mock-be","colleague-identity"
+,2,0,2,"mock-be","editor-identity"
+"fe_users"
+,"uid","pid","username","tx_oauth2_client_configs"
+,1,1,"frontend-user",1
+"tx_oauth2_feuser_provider_configuration"
+,"uid","pid","parentid","provider","identifier"
+,1,0,1,"mock-fe","frontend-identity"

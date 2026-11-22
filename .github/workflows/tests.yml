@@ -1,0 +1,127 @@
+name: Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+      - feature/v14
+
+permissions:
+  contents: read
+
+jobs:
+  unit-tests:
+    name: Unit (PHP ${{ matrix.php-version }}, TYPO3 ${{ matrix.typo3-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { typo3-version: "13.4", php-version: "8.2" }
+          - { typo3-version: "13.4", php-version: "8.3" }
+          - { typo3-version: "13.4", php-version: "8.4" }
+          - { typo3-version: "14.3", php-version: "8.2" }
+          - { typo3-version: "14.3", php-version: "8.4" }
+          - { typo3-version: "14.3", php-version: "8.5" }
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          coverage: none
+          extensions: mbstring, xml, ctype, iconv, intl
+
+      # A changed core version can leave stale class-alias-loader files behind; a second run repairs them
+      - name: Install Composer dependencies
+        run: |
+          composer update --no-progress --with=typo3/cms-core:"^${{ matrix.typo3-version }}" \
+            || composer update --no-progress --with=typo3/cms-core:"^${{ matrix.typo3-version }}"
+
+      - name: Run unit tests
+        run: composer test:unit
+
+  functional-tests:
+    name: Functional (PHP ${{ matrix.php-version }}, TYPO3 ${{ matrix.typo3-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { typo3-version: "13.4", php-version: "8.2" }
+          - { typo3-version: "13.4", php-version: "8.3" }
+          - { typo3-version: "13.4", php-version: "8.4" }
+          - { typo3-version: "14.3", php-version: "8.2" }
+          - { typo3-version: "14.3", php-version: "8.4" }
+          - { typo3-version: "14.3", php-version: "8.5" }
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup DDEV
+        uses: ddev/github-action-setup-ddev@v1
+        with:
+          autostart: false
+
+      - name: Configure and start DDEV
+        run: |
+          ddev config --php-version=${{ matrix.php-version }}
+          ddev start
+
+      - name: Install Composer dependencies
+        run: |
+          ddev composer update --no-progress --with=typo3/cms-core:"^${{ matrix.typo3-version }}" \
+            || ddev composer update --no-progress --with=typo3/cms-core:"^${{ matrix.typo3-version }}"
+
+      - name: Run functional tests
+        run: ddev composer test:functional
+
+  e2e-tests:
+    name: E2E (PHP ${{ matrix.php-version }}, TYPO3 ${{ matrix.typo3-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { typo3-version: "13.4", php-version: "8.4" }
+          - { typo3-version: "14.3", php-version: "8.4" }
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup DDEV
+        uses: ddev/github-action-setup-ddev@v1
+        with:
+          autostart: false
+
+      - name: Configure and start DDEV
+        run: |
+          ddev config --php-version=${{ matrix.php-version }}
+          ddev start
+
+      - name: Install Composer dependencies
+        run: |
+          ddev composer update --no-progress --with=typo3/cms-core:"^${{ matrix.typo3-version }}" \
+            || ddev composer update --no-progress --with=typo3/cms-core:"^${{ matrix.typo3-version }}"
+
+      - name: Init TYPO3
+        run: ddev init-typo3
+
+      - name: Run E2E tests
+        uses: nick-fields/retry@v4
+        with:
+          max_attempts: 3
+          retry_on: error
+          timeout_minutes: 10
+          command: ddev playwright test
+
+      - uses: actions/upload-artifact@v7
+        if: failure()
+        with:
+          name: e2e-reports-${{ matrix.php-version }}-${{ matrix.typo3-version }}
+          path: Tests/Playwright/playwright-report/

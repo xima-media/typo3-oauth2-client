@@ -11,7 +11,7 @@
     <projectFiles>
         <directory name="Classes" />
         <ignoreFiles>
-            <directory name=".build/vendor" />
+            <directory name="vendor" />
         </ignoreFiles>
     </projectFiles>
 </psalm>

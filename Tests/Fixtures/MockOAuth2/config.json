@@ -1,0 +1,77 @@
+{
+	"interactiveLogin": true,
+	"httpServer": "NettyWrapper",
+	"tokenCallbacks": [
+		{
+			"issuerId": "default",
+			"requestMappings": [
+				{
+					"requestParam": "subject",
+					"match": "be-linked",
+					"claims": {
+						"sub": "be-linked",
+						"email": "be-linked@example.org",
+						"email_verified": true,
+						"preferred_username": "be-linked",
+						"name": "BE linked"
+					}
+				},
+				{
+					"requestParam": "subject",
+					"match": "be-unlinked",
+					"claims": {
+						"sub": "be-unlinked",
+						"email": "editor@example.org",
+						"email_verified": false,
+						"preferred_username": "be-unlinked",
+						"name": "BE unlinked"
+					}
+				},
+				{
+					"requestParam": "subject",
+					"match": "be-twice",
+					"claims": {
+						"sub": "be-twice",
+						"email": "be-twice@example.org",
+						"email_verified": true,
+						"preferred_username": "be-twice",
+						"name": "BE twice"
+					}
+				},
+				{
+					"requestParam": "subject",
+					"match": "be-disabled",
+					"claims": {
+						"sub": "be-disabled",
+						"email": "be-disabled@example.org",
+						"email_verified": true,
+						"preferred_username": "be-disabled",
+						"name": "BE disabled"
+					}
+				},
+				{
+					"requestParam": "subject",
+					"match": "fe-linked",
+					"claims": {
+						"sub": "fe-linked",
+						"email": "fe-linked@example.org",
+						"email_verified": true,
+						"preferred_username": "fe-linked",
+						"name": "FE linked"
+					}
+				},
+				{
+					"requestParam": "subject",
+					"match": "fe-otherpid",
+					"claims": {
+						"sub": "fe-otherpid",
+						"email": "fe-otherpid@example.org",
+						"email_verified": true,
+						"preferred_username": "fe-otherpid",
+						"name": "FE other pid"
+					}
+				}
+			]
+		}
+	]
+}
