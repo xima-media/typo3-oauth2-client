@@ -28,29 +28,28 @@
         "ext-pdo": "*",
         "league/oauth2-client": "^2.7",
         "psr/log": "*",
-        "typo3/cms-backend": "^13.4@dev || ^14.2@dev",
-        "typo3/cms-core": "^13.4@dev || ^14.2@dev",
-        "typo3/cms-fluid": "^13.4@dev || ^14.2@dev",
-        "typo3/cms-setup": "^13.4@dev || ^14.2@dev"
+        "typo3/cms-backend": "^13.4 || ^14.3",
+        "typo3/cms-core": "^13.4 || ^14.3",
+        "typo3/cms-fluid": "^13.4 || ^14.3",
+        "typo3/cms-setup": "^13.4 || ^14.3"
     },
     "require-dev": {
         "ergebnis/composer-normalize": "^2.23",
         "friendsofphp/php-cs-fixer": "^3.0",
         "phpstan/extension-installer": "^1.0",
-        "saschaegerer/phpstan-typo3": "@dev",
+        "saschaegerer/phpstan-typo3": "^3.0",
         "symfony/yaml": "^6.4 || ^7.0",
-        "typo3/cms-extensionmanager": "^13.4@dev || ^14.2@dev",
-        "typo3/cms-felogin": "^13.4@dev || ^14.2@dev",
-        "typo3/cms-fluid-styled-content": "^13.4@dev || ^14.2@dev",
-        "typo3/cms-frontend": "^13.4@dev || ^14.2@dev",
-        "typo3/cms-install": "^13.4@dev || ^14.2@dev",
+        "typo3/cms-extensionmanager": "^13.4 || ^14.3",
+        "typo3/cms-felogin": "^13.4 || ^14.3",
+        "typo3/cms-fluid-styled-content": "^13.4 || ^14.3",
+        "typo3/cms-frontend": "^13.4 || ^14.3",
+        "typo3/cms-install": "^13.4 || ^14.3",
         "typo3/coding-standards": "^0.8.0",
         "typo3/testing-framework": "^8.2 || ^9.0"
     },
     "suggest": {
         "league/oauth2-github": "Github Authentication"
     },
-    "minimum-stability": "dev",
     "prefer-stable": true,
     "autoload": {
         "psr-4": {
