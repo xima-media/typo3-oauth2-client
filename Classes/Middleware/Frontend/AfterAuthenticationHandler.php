@@ -138,7 +138,7 @@ class AfterAuthenticationHandler implements MiddlewareInterface
             $userIsLoggedIn = $frontendUser instanceof FrontendUserAuthentication
                 && $frontendUserAspect->isLoggedIn();
             if ($userIsLoggedIn) {
-                $response = $request->getAttribute('frontend.user')->appendCookieToResponse($response);
+                $response = $request->getAttribute('frontend.user')->appendCookieToResponse($response, $request->getAttribute('normalizedParams'));
             }
 
             return $this->sessionManager->appendRemoveOAuth2CookieToResponse($response, $request);

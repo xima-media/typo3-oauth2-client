@@ -16,6 +16,14 @@ test.describe('Frontend login', () => {
         await expectFrontendLoggedIn(page, 'fe-linked');
     });
 
+    test('a linked user logs in with a login link and returns to the login page', async ({ page }) => {
+        await page.goto('/login?logintype=login&oauth2-provider=mock');
+        await mockLogin(page, 'fe-linked');
+
+        await expect(page).toHaveURL(/^http:\/\/[^/]+\/login$/);
+        await expectFrontendLoggedIn(page, 'fe-linked');
+    });
+
     test('felogin only offers the providers enabled for the site language', async ({ page }) => {
         await page.goto('/login');
         await expect(page.locator('button[name="oauth2-provider"]')).toHaveText(['Mock', 'Mock FE']);
