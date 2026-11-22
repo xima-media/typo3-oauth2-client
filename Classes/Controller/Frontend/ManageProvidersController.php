@@ -30,8 +30,7 @@ class ManageProvidersController extends ActionController
         private readonly SessionManager $sessionManager,
         private readonly RedirectRequestService $redirectRequestService,
         private readonly Context $context
-    ) {
-    }
+    ) {}
 
     /**
      * @throws AspectNotFoundException
@@ -53,7 +52,7 @@ class ManageProvidersController extends ActionController
             $userid = (int)$frontendUser->get('id');
             $this->view->assignMultiple([
                 'providers' => $this->oauth2ProviderManager->getEnabledFrontendProviders(),
-                'activeProviders' => $this->frontendUserRepository->getActiveProviders($userid)
+                'activeProviders' => $this->frontendUserRepository->getActiveProviders($userid),
             ]);
         }
 

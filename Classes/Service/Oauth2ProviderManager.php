@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Waldhacker\Oauth2Client\Service;
 
-use InvalidArgumentException;
 use League\OAuth2\Client\Provider\AbstractProvider;
 use League\OAuth2\Client\Provider\GenericProvider;
 use Psr\Http\Message\ServerRequestInterface;
@@ -68,7 +67,7 @@ class Oauth2ProviderManager
     public function createProvider(string $providerId, ?string $redirectUrl = null): AbstractProvider
     {
         if (!isset($this->providerConfigurations[$providerId])) {
-            throw new InvalidArgumentException('No such provider: ' . $providerId, 1642867944);
+            throw new \InvalidArgumentException('No such provider: ' . $providerId, 1642867944);
         }
         $provider = $this->providerConfigurations[$providerId];
         $options = $provider->getOptions();
@@ -104,7 +103,7 @@ class Oauth2ProviderManager
     {
         $providers = array_filter(
             $this->getConfiguredProviders() ?? [],
-            static fn (ProviderConfiguration $provider): bool => $provider->hasScope(self::SCOPE_BACKEND)
+            static fn(ProviderConfiguration $provider): bool => $provider->hasScope(self::SCOPE_BACKEND)
         );
         if (count($providers) > 0) {
             return $providers;
@@ -116,7 +115,7 @@ class Oauth2ProviderManager
     {
         $providers = array_filter(
             $this->getConfiguredProviders() ?? [],
-            static fn (ProviderConfiguration $provider): bool => $provider->hasScope(self::SCOPE_FRONTEND)
+            static fn(ProviderConfiguration $provider): bool => $provider->hasScope(self::SCOPE_FRONTEND)
         );
         if (count($providers) > 0) {
             return $providers;
@@ -143,7 +142,7 @@ class Oauth2ProviderManager
 
         $configuredEnabledProviders = array_filter(
             $this->getConfiguredFrontendProviders() ?? [],
-            static fn (ProviderConfiguration $provider): bool
+            static fn(ProviderConfiguration $provider): bool
                 => in_array($provider->getIdentifier(), $enabledProviderIds)
         );
 

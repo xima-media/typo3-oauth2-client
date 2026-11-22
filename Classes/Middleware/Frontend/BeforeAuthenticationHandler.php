@@ -21,8 +21,7 @@ class BeforeAuthenticationHandler implements MiddlewareInterface
         private readonly SiteService $siteService,
         private readonly RequestStates $requestStates,
         private readonly RedirectRequestService $redirectRequestService
-    ) {
-    }
+    ) {}
 
     /**
      * @throws SessionNotCreatedException

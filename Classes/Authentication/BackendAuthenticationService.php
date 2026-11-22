@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Waldhacker\Oauth2Client\Authentication;
 
 use Doctrine\DBAL\Exception;
-use InvalidArgumentException;
 use League\OAuth2\Client\Provider\ResourceOwnerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
@@ -36,8 +35,7 @@ class BackendAuthenticationService extends AbstractAuthenticationService
         private readonly UriBuilder $uriBuilder,
         private readonly ResponseFactoryInterface $responseFactory,
         private readonly EventDispatcherInterface $eventDispatcher,
-    ) {
-    }
+    ) {}
 
     /**
      * @return ?array
@@ -203,7 +201,7 @@ class BackendAuthenticationService extends AbstractAuthenticationService
     {
         $request = $GLOBALS['TYPO3_REQUEST'] ?? ServerRequestFactory::fromGlobals();
         if (!($request instanceof ServerRequestInterface)) {
-            throw new InvalidArgumentException(
+            throw new \InvalidArgumentException(
                 sprintf('Request must implement "%s"', ServerRequestInterface::class),
                 1643446001
             );

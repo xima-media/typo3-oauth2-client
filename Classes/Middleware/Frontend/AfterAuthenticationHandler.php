@@ -35,8 +35,7 @@ class AfterAuthenticationHandler implements MiddlewareInterface
         private readonly RedirectRequestService $redirectRequestService,
         private readonly Context $context,
         private readonly ResponseFactoryInterface $responseFactory
-    ) {
-    }
+    ) {}
 
     /**
      * @throws ContainerExceptionInterface

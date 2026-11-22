@@ -20,8 +20,7 @@ final class FrontendUserLookupEvent
         private ?array $typo3User,
         private readonly ?SiteInterface $site,
         private readonly ?SiteLanguage $language
-    ) {
-    }
+    ) {}
 
     public function getProviderId(): string
     {

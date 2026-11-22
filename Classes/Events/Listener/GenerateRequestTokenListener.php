@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Waldhacker\Oauth2Client\Events\Listener;
 
-use DateInterval;
-use DateMalformedIntervalStringException;
 use TYPO3\CMS\Core\Authentication\Event\BeforeRequestTokenProcessedEvent;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Context\DateTimeAspect;
@@ -15,13 +13,11 @@ use Waldhacker\Oauth2Client\Backend\LoginProvider\Oauth2LoginProvider;
 
 class GenerateRequestTokenListener
 {
-    public function __construct(protected readonly Context $context)
-    {
-    }
+    public function __construct(protected readonly Context $context) {}
 
     /**
      * @throws AspectNotFoundException
-     * @throws DateMalformedIntervalStringException
+     * @throws \DateMalformedIntervalStringException
      */
     public function __invoke(BeforeRequestTokenProcessedEvent $event): void
     {
@@ -67,7 +63,7 @@ class GenerateRequestTokenListener
         /** @var DateTimeAspect $date */
         $date = $this->context->getAspect('date');
         $now = $date->getDateTime();
-        $interval = new DateInterval(sprintf('PT%dS', 5));
+        $interval = new \DateInterval(sprintf('PT%dS', 5));
 
         $moreThan5Seconds = $now > $requestToken->time->add($interval);
         if ($moreThan5Seconds) {

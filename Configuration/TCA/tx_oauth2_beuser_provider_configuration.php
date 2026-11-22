@@ -23,7 +23,7 @@ return [
         'crdate' => 'crdate',
         'hideTable' => 1,
         'typeicon_classes' => [
-            'default' => 'actions-key'
+            'default' => 'actions-key',
         ],
         'enablecolumns' => [
             'be_user' => 'parentid',
@@ -32,28 +32,28 @@ return [
             'ignoreWebMountRestriction' => true,
             'ignoreRootLevelRestriction' => true,
         ],
-        'rootLevel' => 1
+        'rootLevel' => 1,
     ],
 
     'columns' => [
         'parentid' => [
             'config' => [
-                'type' => 'passthrough'
-            ]
+                'type' => 'passthrough',
+            ],
         ],
         'provider' => [
             'label' => 'Provider',
             'config' => [
                 'type' => 'input',
-                'readOnly' => true
-            ]
+                'readOnly' => true,
+            ],
         ],
         'identifier' => [
             'label' => 'Identifier',
             'config' => [
                 'type' => 'input',
-                'readOnly' => true
-            ]
+                'readOnly' => true,
+            ],
         ],
     ],
 

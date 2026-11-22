@@ -28,7 +28,7 @@ defined('TYPO3') || die();
             'quality' => 50,
             'os' => '',
             'exec' => '',
-            'className' => BackendAuthenticationService::class
+            'className' => BackendAuthenticationService::class,
         ]
     );
 
@@ -45,7 +45,7 @@ defined('TYPO3') || die();
             'quality' => 50,
             'os' => '',
             'exec' => '',
-            'className' => FrontendAuthenticationService::class
+            'className' => FrontendAuthenticationService::class,
         ]
     );
 
