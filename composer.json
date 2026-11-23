@@ -19,9 +19,10 @@
             "role": "Developer"
         }
     ],
-    "homepage": "https://gitlab.com/co-stack.com/co-stack.com/typo3-extensions/typo3-oauth2-client",
+    "homepage": "https://github.com/xima-media/typo3-oauth2-client",
     "support": {
-        "issues": "https://gitlab.com/co-stack.com/co-stack.com/typo3-extensions/typo3-oauth2-client/-/issues"
+        "issues": "https://github.com/xima-media/typo3-oauth2-client/issues",
+        "source": "https://github.com/xima-media/typo3-oauth2-client"
     },
     "require": {
         "php": "^8.2",
@@ -30,10 +31,10 @@
         "psr/log": "*",
         "typo3/cms-backend": "^13.4 || ^14.3",
         "typo3/cms-core": "^13.4 || ^14.3",
-        "typo3/cms-fluid": "^13.4 || ^14.3",
-        "typo3/cms-setup": "^13.4 || ^14.3"
+        "typo3/cms-fluid": "^13.4 || ^14.3"
     },
     "require-dev": {
+        "eliashaeussler/typo3-vendor-bundler": "^4.1",
         "ergebnis/composer-normalize": "^2.23",
         "friendsofphp/php-cs-fixer": "^3.0",
         "phpstan/extension-installer": "^1.0",
@@ -44,11 +45,13 @@
         "typo3/cms-fluid-styled-content": "^13.4 || ^14.3",
         "typo3/cms-frontend": "^13.4 || ^14.3",
         "typo3/cms-install": "^13.4 || ^14.3",
+        "typo3/cms-setup": "^13.4 || ^14.3",
         "typo3/coding-standards": "^0.8.0",
         "typo3/testing-framework": "^8.2 || ^9.0"
     },
     "suggest": {
-        "league/oauth2-github": "Github Authentication"
+        "league/oauth2-github": "Github Authentication",
+        "typo3/cms-setup": "Required on TYPO3 13.4 to manage providers in the user settings (part of typo3/cms-backend since 14.3)"
     },
     "prefer-stable": true,
     "autoload": {
@@ -64,6 +67,7 @@
     "config": {
         "allow-plugins": {
             "composer/package-versions-deprecated": true,
+            "eliashaeussler/typo3-vendor-bundler": true,
             "ergebnis/composer-normalize": true,
             "phpstan/extension-installer": true,
             "typo3/class-alias-loader": true,
@@ -99,6 +103,7 @@
         ],
         "ci:yaml:lint": "find . ! -path './vendor/*' ! -path './public/*' ! -path './var/*' ! -path '*/node_modules/*' \\( -name '*.yaml' -o -name '*.yml' \\) -print0 | xargs -0 -r yaml-lint",
         "composer:normalize": "@composer normalize --no-check-lock",
+        "libs:bundle": "bash build/bundle-libraries.sh",
         "php:fixer": "php-cs-fixer fix --config build/phpcs.dist",
         "php:stan:baseline": "phpstan analyse --configuration build/phpstan.neon --no-progress --generate-baseline build/phpstan.baseline.neon",
         "test:functional": "phpunit -c phpunit.functional.xml",

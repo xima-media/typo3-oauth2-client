@@ -23,15 +23,13 @@ For more info, please refer to the documentation.
 
 ## Issues & Contributions
 
-Find the code at https://gitlab.com/co-stack.com/co-stack.com/typo3-extensions/typo3-oauth2-client
+Find the code at https://github.com/xima-media/typo3-oauth2-client
 
-Report issues at https://gitlab.com/co-stack.com/co-stack.com/typo3-extensions/typo3-oauth2-client/-/issues
+Report issues at https://github.com/xima-media/typo3-oauth2-client/issues
 
 ### Security
 
-If you learn about a potential security issue, please **always** contact us via security@co-stack.com and please **do not** create a public visible issue.
-Please always include the version number where you've discovered the issue.
-
-Alternatively you can contact the TYPO3 Security Team via security@typo3.org.
+If you learn about a potential security issue, please **do not** create a public visible issue.
+Contact the TYPO3 Security Team via security@typo3.org instead.
 Please always include the version number where you've discovered the issue.
 For more details see [TYPO3 Security Team](https://typo3.org/community/teams/security/).

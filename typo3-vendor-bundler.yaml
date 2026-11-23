@@ -1,0 +1,3 @@
+# The SBOM carries a timestamp, so it would never match the committed bundle
+dependencies:
+  enabled: false

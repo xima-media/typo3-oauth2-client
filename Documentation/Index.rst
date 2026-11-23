@@ -67,7 +67,7 @@ Overview
 Want to report an issue or contribute?
 =======================================
 
-Join us on `Github <https://github.com/waldhacker/ext-oauth2-client>`__
+Join us on `GitHub <https://github.com/xima-media/typo3-oauth2-client>`__
 
 
 Found a mistake in the manual?

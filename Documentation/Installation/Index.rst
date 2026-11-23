@@ -13,7 +13,14 @@ Require the extension with composer:
 
 .. code-block:: bash
 
-   composer require waldhacker/typo3-oauth2-client
+   composer require co-stack/typo3-oauth2-client
+
+On TYPO3 13.4, users manage their providers in the user settings of EXT:setup.
+Require it as well if your installation does not include it yet:
+
+.. code-block:: bash
+
+   composer require typo3/cms-setup
 
 Activate it either via command line or in the extension manager
 
