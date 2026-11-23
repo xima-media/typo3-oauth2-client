@@ -7,16 +7,10 @@
     "type": "typo3-cms-extension",
     "authors": [
         {
-            "name": "Oliver Eglseder",
-            "email": "oliver.eglseder@co-stack.com",
-            "homepage": "https://www.co-stack.com/",
-            "role": "Developer"
-        },
-        {
-            "name": "waldhacker",
-            "email": "hello@waldhacker.dev",
-            "homepage": "https://waldhacker.dev",
-            "role": "Developer"
+            "name": "Maik Schneider",
+            "email": "maik.schneider@xima.de",
+            "homepage": "https://www.xima.de",
+            "role": "Maintainer"
         }
     ],
     "homepage": "https://github.com/xima-media/typo3-oauth2-client",

@@ -21,6 +21,10 @@ For more info, please refer to the documentation.
 
 `composer req co-stack/typo3-oauth2-client`
 
+## Credits
+
+Originally developed by Oliver Eglseder and waldhacker.
+
 ## Issues & Contributions
 
 Find the code at https://github.com/xima-media/typo3-oauth2-client

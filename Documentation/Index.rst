@@ -19,13 +19,13 @@ TYPO3 OAuth2 login client (backend and frontend)
    en
 
 :Authors:
-   waldhacker UG (haftungsbeschränkt)
+   Maik Schneider, XIMA Media GmbH
 
 :Email:
-   hello@waldhacker.dev
+   maik.schneider@xima.de
 
 :Website:
-   https://waldhacker.dev
+   https://www.xima.de
 
 :License:
    This extension documentation is published under the
