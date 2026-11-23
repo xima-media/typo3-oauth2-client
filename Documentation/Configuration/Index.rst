@@ -6,391 +6,400 @@
 Configuration
 =============
 
-Prerequisites
-=============
+The providers are configured in PHP, in
+:php:`$GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['oauth2_client']`. Put the
+configuration in :file:`config/system/additional.php` (Composer) or
+:file:`typo3conf/system/additional.php` (classic mode), so secrets can come
+from environment variables.
 
-As the extension allows 3rd party login providers to authenticate users, the first thing you need is to change the cookie security setting for the backend from `sameSite` to `lax` (if you are using providers hosted on another domain, for example Github or Google).
+.. contents::
+   :local:
+   :depth: 1
 
-File: :file:`AdditionalConfiguration.php` (or adjust :file:`LocalConfiguration.php`):
+.. _configuration-example:
+
+Complete example
+================
+
+One provider for backend and frontend, using the bundled ``GenericProvider``
+with an OpenID Connect provider (here: authentik):
 
 .. code-block:: php
+   :caption: config/system/additional.php
 
+   use Waldhacker\Oauth2Client\Service\Oauth2ProviderManager;
+
+   // Third-party providers redirect back to TYPO3 cross-site: the OAuth2
+   // session cookie must be sent on that redirect (TYPO3 default for BE is "strict")
    $GLOBALS['TYPO3_CONF_VARS']['BE']['cookieSameSite'] = 'lax';
-   $GLOBALS['TYPO3_CONF_VARS']['FE']['cookieSameSite'] = 'lax';
 
-Access Rights in Backend Context
-================================
-
-To allow non-admin users to register OAuth2 providers, please allow them to access the module `User Settings (user_setup)`.
-
-To allow non-admin users to revoke OAuth2 provider registrations for frontend users, please allow them to modify the table :sql:`tx_oauth2_feuser_provider_configuration`.
-
-Authentication Providers
-========================
-
-The extension is based on the OAuth2 client implementation from https://oauth2-client.thephpleague.com - by default, it comes with a
-generic provider you can configure for your use case.
-
-The configuration is done in the file :file:`AdditionalConfiguration.php` or directly in `LocalConfiguration.php` in the section :php:`$GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['oauth2_client']`.
-
-.. note::
-
-   If you are using composer, you can ease your configuration by requiring a pre-configured client package for the platform you want.
-
-In the following section both the generic and some more specific examples are shown.
-
-GenericProvider - Configuration
--------------------------------
-
-The generic provider can be used for basically any platform that supports OAuth2.
-
-Gitlab minimal example::
-
-   $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['oauth2_client'] = [
-       'providers' => [
-           'gitlab' => [
-               'label' => 'Gitlab',
-               'scopes' => [
-                  \Waldhacker\Oauth2Client\Service\Oauth2ProviderManager::SCOPE_BACKEND,
-                  \Waldhacker\Oauth2Client\Service\Oauth2ProviderManager::SCOPE_FRONTEND,
-               ],
-               'options' => [
-                   'clientId' => '<your-gitlab-client-id>',
-                   'clientSecret' => '<your-gitlab-client-secret',
-                   'urlAuthorize' => 'https://<your-gitlab-installation.dev>/oauth/authorize',
-                   'urlAccessToken' => 'https://<your-gitlab-installation.dev>/oauth/token',
-                   'urlResourceOwnerDetails' => 'https://<your-gitlab-installation.dev>/api/v4/user',
-                   'scopes' => ['openid', 'read_user'],
-                   'scopeSeparator' => ' '
-               ],
+   $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['oauth2_client']['providers'] = [
+       'authentik' => [
+           'label' => 'Company SSO',
+           'description' => 'Log in with your company account',
+           'iconIdentifier' => 'actions-key',
+           'scopes' => [
+               Oauth2ProviderManager::SCOPE_BACKEND,
+               Oauth2ProviderManager::SCOPE_FRONTEND,
+           ],
+           'options' => [
+               'clientId' => getenv('AUTHENTIK_CLIENT_ID'),
+               'clientSecret' => getenv('AUTHENTIK_CLIENT_SECRET'),
+               'urlAuthorize' => 'https://auth.example.com/application/o/authorize/',
+               'urlAccessToken' => 'https://auth.example.com/application/o/token/',
+               'urlResourceOwnerDetails' => 'https://auth.example.com/application/o/userinfo/',
+               'responseResourceOwnerId' => 'sub',
+               'scopes' => ['openid', 'email', 'profile'],
+               'scopeSeparator' => ' ',
            ],
        ],
    ];
 
+The array key (``authentik``) is the *provider identifier*. It is part of the
+redirect URIs and of every stored identity: do not change it once users have
+linked their accounts.
 
-$GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['oauth2_client']['providers'][<provider-identifier>]
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. _configuration-provider-options:
 
-.. rst-class:: dl-parameters
+Provider options
+================
 
-label
-   :sep:`|` :aspect:`Condition:` required
-   :sep:`|` :aspect:`Type:` string
-   :sep:`|` :aspect:`Default:` ''
-   :sep:`|`
+:php:`$GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['oauth2_client']['providers'][<identifier>]`
 
-   The label to show both in the login screen as well as in the configuration.
+.. confval:: label
+   :name: provider-label
+   :type: string
+   :required: true
 
-description
-   :sep:`|` :aspect:`Condition:` optional
-   :sep:`|` :aspect:`Type:` string
-   :sep:`|` :aspect:`Default:` ''
-   :sep:`|`
+   Button label on the login screens and in the "Manage providers" views.
+   An ``LLL:`` reference is translated.
 
-   A description for the provider. The description is shown to the user when configuring the provider.
+.. confval:: description
+   :name: provider-description
+   :type: string
+   :Default: ``''``
 
-iconIdentifier
-   :sep:`|` :aspect:`Condition:` optional
-   :sep:`|` :aspect:`Type:` string
-   :sep:`|` :aspect:`Default:` 'actions-key'
-   :sep:`|`
+   Shown in the "Manage providers" views. An ``LLL:`` reference is translated.
 
-   A registered icon identifier. If you want to use custom icons, make sure to register them first.
+.. confval:: iconIdentifier
+   :name: provider-iconidentifier
+   :type: string
+   :Default: ``'actions-key'``
 
-implementationClassName
-   :sep:`|` :aspect:`Condition:` optional
-   :sep:`|` :aspect:`Type:` string
-   :sep:`|` :aspect:`Default:` 'actions-key'
-   :sep:`|`
+   A registered icon identifier. Register own icons in
+   :file:`Configuration/Icons.php` of your site package.
 
-   The provider class name - the default is `\League\OAuth2\Client\Provider\GenericProvider::class` - can be
-   replaced for more specific providers, for example `\League\OAuth2\Client\Provider\Github::class` if the github
-   provider has been installed.
+.. confval:: implementationClassName
+   :name: provider-implementationclassname
+   :type: class-string
+   :Default: ``\League\OAuth2\Client\Provider\GenericProvider::class``
 
-scopes
-   :sep:`|` :aspect:`Condition:` optional
-   :sep:`|` :aspect:`Type:` array
-   :sep:`|` :aspect:`Default:` both backend and frontend are enabled
-   :sep:`|`
+   Provider class of league/oauth2-client. Composer installations can use a
+   provider package, for example ``\League\OAuth2\Client\Provider\Github::class``
+   from ``league/oauth2-github``. Classic mode ships the ``GenericProvider``
+   only.
 
-   The scopes where this provider can be used. Can be an array with either `\Waldhacker\Oauth2Client\Service\Oauth2ProviderManager::SCOPE_BACKEND` for backend only or `\Waldhacker\Oauth2Client\Service\Oauth2ProviderManager::SCOPE_FRONTEND` for frontend only or both.
+.. confval:: scopes
+   :name: provider-scopes
+   :type: array
+   :Default: backend and frontend
 
-   Example::
+   Where the provider is offered:
+   :php:`Oauth2ProviderManager::SCOPE_BACKEND` (``'backend'``) and/or
+   :php:`Oauth2ProviderManager::SCOPE_FRONTEND` (``'frontend'``). Not to be
+   confused with the OAuth2 scopes in :confval:`options.scopes <provider-options-scopes>`.
 
-      'scopes' => [
-         \Waldhacker\Oauth2Client\Service\Oauth2ProviderManager::SCOPE_BACKEND,
-         \Waldhacker\Oauth2Client\Service\Oauth2ProviderManager::SCOPE_FRONTEND,
-      ],
+.. confval:: options
+   :name: provider-options
+   :type: array
+   :required: true
 
+   Passed to the constructor of the provider class. The extension sets
+   ``redirectUri`` itself. The keys below are the ones of the
+   ``GenericProvider``; provider packages document their own.
 
-options.[...]
-   :sep:`|` :aspect:`Condition:` required
-   :sep:`|` :aspect:`Type:` array
-   :sep:`|` :aspect:`Default:`
-   :sep:`|`
+.. confval:: options.clientId
+   :name: provider-options-clientid
+   :type: string
+   :required: true
 
-   The provider options - are given directly to the provider instance as constructor arguments. Please check your
-   provider documentation for the concrete values (and see the examples section in this manual).
+   Client ID of the application registered at the provider.
 
-options.clientId
-   :sep:`|` :aspect:`Condition:` required
-   :sep:`|` :aspect:`Type:` string
-   :sep:`|` :aspect:`Default:`
-   :sep:`|`
+.. confval:: options.clientSecret
+   :name: provider-options-clientsecret
+   :type: string
+   :required: true
 
-   The OAuth2 client id.
+   Client secret of the application registered at the provider.
 
-options.clientSecret
-   :sep:`|` :aspect:`Condition:` required
-   :sep:`|` :aspect:`Type:` string
-   :sep:`|` :aspect:`Default:`
-   :sep:`|`
+.. confval:: options.urlAuthorize
+   :name: provider-options-urlauthorize
+   :type: string
+   :required: true
 
-   The OAuth2 client secret.
+   Authorization endpoint.
 
-options.urlAuthorize
-   :sep:`|` :aspect:`Condition:` required
-   :sep:`|` :aspect:`Type:` string
-   :sep:`|` :aspect:`Default:`
-   :sep:`|`
+.. confval:: options.urlAccessToken
+   :name: provider-options-urlaccesstoken
+   :type: string
+   :required: true
 
-   The OAuth2 authorization URL.
+   Token endpoint.
 
-options.urlAccessToken
-   :sep:`|` :aspect:`Condition:` required
-   :sep:`|` :aspect:`Type:` string
-   :sep:`|` :aspect:`Default:`
-   :sep:`|`
+.. confval:: options.urlResourceOwnerDetails
+   :name: provider-options-urlresourceownerdetails
+   :type: string
+   :required: true
 
-   The OAuth2 access token API URL.
+   Endpoint that returns the user (OpenID Connect: the user info endpoint).
 
-options.urlResourceOwnerDetails
-   :sep:`|` :aspect:`Condition:` required
-   :sep:`|` :aspect:`Type:` string
-   :sep:`|` :aspect:`Default:`
-   :sep:`|`
+.. confval:: options.responseResourceOwnerId
+   :name: provider-options-responseresourceownerid
+   :type: string
+   :Default: ``'id'``
 
-   The OAuth2 REST API URL for getting the resource owner information (for example the user profile REST API route).
+   Field of the user info response that identifies the user. OpenID Connect
+   providers return ``sub``.
 
-options.scopes
-   :sep:`|` :aspect:`Condition:` optional
-   :sep:`|` :aspect:`Type:` array of strings
-   :sep:`|` :aspect:`Default:`
-   :sep:`|`
+.. confval:: options.scopes
+   :name: provider-options-scopes
+   :type: array
+   :Default: none
 
-   The scopes to request for the OAuth provider. May be required depending on the concrete provider (it is required in Gitlab for example).
+   OAuth2 scopes to request, for OpenID Connect ``['openid', 'email', 'profile']``.
 
-options.scopeSeparator
-   :sep:`|` :aspect:`Condition:` optional
-   :sep:`|` :aspect:`Type:` string
-   :sep:`|` :aspect:`Default:` `,`
-   :sep:`|`
+.. confval:: options.scopeSeparator
+   :name: provider-options-scopeseparator
+   :type: string
+   :Default: ``','``
 
-   The scope separator used to separate the different required scopes in the URL.
+   Separator for the requested scopes. OpenID Connect providers expect ``' '``.
 
-options.proxy | options.verify
-   :sep:`|` :aspect:`Condition:` optional
-   :sep:`|` :aspect:`Type:` string
-   :sep:`|` :aspect:`Default:`
-   :sep:`|`
+.. confval:: options.proxy
+   :name: provider-options-proxy
+   :type: string
 
-   You can use a proxy to debug HTTP calls made to a provider. See https://oauth2-client.thephpleague.com/usage/#using-a-proxy
+   Proxy for the HTTP requests to the provider, for example ``'127.0.0.1:8080'``.
+   With a proxy, ``options.verify => false`` turns off TLS verification
+   (debugging only). See the `league/oauth2-client documentation
+   <https://oauth2-client.thephpleague.com/usage/#using-a-proxy>`__.
 
-collaborators
-   :sep:`|` :aspect:`Condition:` optional
-   :sep:`|` :aspect:`Type:` array
-   :sep:`|` :aspect:`Default:`
-   :sep:`|`
+.. confval:: collaborators
+   :name: provider-collaborators
+   :type: array
 
-   If you have advanced requirements, within this property you can change the default `collaborators` from the default implementation. See https://github.com/thephpleague/oauth2-client/blob/8c7498c14959b98d4143a8ef91e895f353381628/src/Provider/AbstractProvider.php#L107
+   Replaces collaborators of the provider, for example ``'httpClient'``. A
+   string value is instantiated with :php:`GeneralUtility::makeInstance()`.
 
-Full example:
+The ``GenericProvider`` also accepts ``accessTokenMethod``,
+``accessTokenResourceOwnerId``, ``responseError`` and ``responseCode``.
+
+.. _configuration-redirect-uris:
+
+Redirect URIs
+=============
+
+The provider only redirects back to URIs you registered for the client.
+TYPO3 uses four of them. Replace ``<identifier>`` with the provider identifier.
+
+Backend login
+   ``https://example.com/typo3/login?loginProvider=1616569531&oauth2-provider=<identifier>&login_status=login&commandLI=attempt``
+
+Backend linking (user settings)
+   ``https://example.com/typo3/oauth2/callback/handle?oauth2-provider=<identifier>&action=callback``
+
+Frontend login
+   ``https://example.com/_oauth2?oauth2-provider=<identifier>&logintype=login``
+
+Frontend linking (plugin)
+   ``https://example.com/_oauth2?oauth2-provider=<identifier>&tx_oauth2client%5Baction%5D=verify``
+
+Where the URIs differ per installation:
+
+*  The backend URIs use the host the backend is called with and its entry
+   point (``/typo3``).
+*  The frontend URIs use the base of the current **site language** and its
+   :ref:`callback slug <configuration-frontend>` (default ``_oauth2``). A site
+   with ``/de/`` as German base needs ``https://example.com/de/_oauth2?…`` as
+   well. Register the frontend URIs for every site and language that offers
+   the provider.
+*  Some providers compare the full URI including the query string, others
+   only scheme, host and path. Registering the full URIs works with both.
+
+.. _configuration-backend:
+
+Backend
+=======
+
+Cookies
+   TYPO3 stores the OAuth2 state in a session cookie that follows
+   ``cookieSameSite`` of the backend. With the default ``strict``, the browser
+   does not send it on the redirect from a provider on another site and the
+   login fails. Set it to ``lax``:
+   :php:`$GLOBALS['TYPO3_CONF_VARS']['BE']['cookieSameSite'] = 'lax';`
+   (the frontend default is ``lax`` already).
+
+Access rights
+   Non-admin users need access to the module :guilabel:`User Settings`
+   (``user_setup``) to link providers.
+
+Hiding the setting
+   User TSconfig can hide the "Manage OAuth2 providers" button:
+
+   .. code-block:: typoscript
+
+      # TYPO3 14.3
+      setup.fields.oauth2_providers.disabled = 1
+      # TYPO3 13.4
+      setup.fields.tx_oauth2_client_configs.disabled = 1
+
+Revoking links
+   Administrators see the linked providers of a user in the backend user and
+   frontend user records (field :guilabel:`OAuth2 Client Configuration`) and
+   can deactivate them there. Non-admins need modify rights on
+   ``tx_oauth2_feuser_provider_configuration`` to do this for frontend users.
+
+.. _configuration-frontend:
+
+Frontend
+========
+
+Site configuration
+------------------
+
+Each site enables its providers in the site configuration
+(:guilabel:`Sites` > :guilabel:`Setup` on 14.3, :guilabel:`Site Management` >
+:guilabel:`Sites` on 13.4), tab :guilabel:`Manage OAuth2 providers`. Each
+site language has the same fields to override the site values.
+
+.. figure:: ../Images/Frontend/siteConfiguration.png
+   :class: with-shadow
+   :alt: Site configuration tab "Manage OAuth2 providers" with enabled providers, callback slug and storage folder
+   :width: 600px
+
+   Frontend settings of a site
+
+Enabled OAuth2 providers (``enabled_oauth2_providers``)
+   Providers with the ``frontend`` scope that this site offers, in this order.
+
+The OAuth2 callback slug (``oauth2_callback_slug``)
+   Path of the frontend redirect URIs, default ``_oauth2``. It must not be the
+   slug of a page.
+
+Storage Folder for Frontend Users (``oauth2_storage_pid``)
+   **Required.** Only frontend users in this folder (not in subfolders) can
+   log in or link a provider. Without it, a frontend OAuth2 login throws an
+   exception. The list shows folders with :guilabel:`Contains Plugin` set to
+   :guilabel:`Website Users`.
+
+The same settings in :file:`config/sites/<site>/config.yaml`:
+
+.. code-block:: yaml
+
+   enabled_oauth2_providers: 'authentik,google'
+   oauth2_callback_slug: '_oauth2'
+   oauth2_storage_pid: 12
+   languages:
+     -
+       languageId: 1
+       base: /de/
+       enabled_oauth2_providers: authentik
+
+Login form
+----------
+
+felogin gets the variable ``{oauth2Providers}`` with the providers enabled for
+the current site language. Add a second form to your felogin template
+(:file:`Login/Login.fluid.html` on 14.3, :file:`Login/Login.html` on 13.4),
+next to the username/password form. A separate form avoids the ``required``
+attributes of the username and password fields:
+
+.. code-block:: html
+
+   <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+         xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
+         data-namespace-typo3-fluid="true">
+
+   <f:if condition="{oauth2Providers}">
+       <f:form target="_top" fieldNamePrefix="" action="login">
+           <f:form.hidden name="logintype" value="login"/>
+           <f:for each="{oauth2Providers}" as="provider">
+               <button type="submit" name="oauth2-provider" value="{provider.identifier}">
+                   <core:icon identifier="{provider.iconIdentifier}"/> {provider.label}
+               </button>
+           </f:for>
+       </f:form>
+   </f:if>
+
+felogin is not required. A link to any page that allows logins starts a login
+as well: ``https://example.com/login?logintype=login&oauth2-provider=<identifier>``.
+After the login, TYPO3 returns to that page.
+
+Redirect after login
+--------------------
+
+To return to another page of the same site, add
+``after-oauth2-redirect-uri=<absolute URL>`` to the login or linking link. This
+is off by default, enable it with a feature flag:
 
 .. code-block:: php
 
-   $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['oauth2_client'] = [
-      'providers' => [
-           'gitlab' => [
-            'label' => 'Gitlab',
-            'iconIdentifier' => 'oauth2-gitlab',
-            'description' => 'Login with Gitlab',
-            'implementationClassName' => \League\OAuth2\Client\Provider\GenericProvider::class,
-            'scopes' => [
-                \Waldhacker\Oauth2Client\Service\Oauth2ProviderManager::SCOPE_BACKEND,
-                \Waldhacker\Oauth2Client\Service\Oauth2ProviderManager::SCOPE_FRONTEND,
-            ],
-            'options' => [
-                'clientId' => '<client-id>',
-                'clientSecret' => '<client-secret>',
-                'urlAuthorize' => 'https://<your-gitlab-url>/oauth/authorize',
-                'urlAccessToken' => 'https://<your-gitlab-url>/oauth/token',
-                'urlResourceOwnerDetails' => 'https://<your-gitlab-url>/api/v4/user',
-                'scopes' => ['openid', 'read_user'],
-                'scopeSeparator' => ' ',
-                'proxy' => '127.0.0.1:8080',
-                'verify' => false,
-            ],
-            'collaborators' => [
-                'httpClient' => \My\Custom\HttpClient::class,
-            ],
-        ],
-      ]
-   ];
+   $GLOBALS['TYPO3_CONF_VARS']['SYS']['features']['oauth2.frontend.login.afterOauth2RedirectUriFromQuery'] = true;
 
-Frontend user storage
----------------------
+The URL must use the scheme and host of the current site language. Do not add
+the parameter to the registered redirect URIs.
 
-You must configure a frontend user storage folder within the site / site language settings.
-Only if frontend users are in this storage folder they can login with an OAuth2 provider or register an OAUth2 provider.
-Set :guilabel:`Behaviour` -> :guilabel:`Contains Plugin` to :guilabel:`Website Users` to make a frontend user storage folder selectable in the site / site language settings.
+"Manage OAuth2 providers" plugin
+--------------------------------
 
-   .. figure:: ../Images/Frontend/administrateUserStorageModule.png
-      :class: with-shadow
-      :alt: TYPO3 user storage folder configuration
-      :width: 600px
+Add the content element :guilabel:`Manage OAuth2 providers`
+(``oauth2client_manageproviders``) to a page for logged-in users, for example
+the profile page. It lists the providers enabled for the site; users activate
+and deactivate them there.
 
-      Set user storage folder configuration
+.. _configuration-templates:
 
-Now you can set this frontend user storage folder within the site / site language settings
+Templates
+=========
 
-   .. figure:: ../Images/Frontend/administrateUserStorage.png
-      :class: with-shadow
-      :alt: TYPO3 site language module with configured frontend user storage folder
-      :width: 600px
+Frontend plugin
+   Override the templates with TypoScript and copy
+   :file:`Resources/Private/Templates/Frontend/ManageProviders/List.html` and
+   :file:`Resources/Private/Partials/Frontend/ManageProviders/ProviderItem.html`:
 
-      Manage frontend user storage folder
+   .. code-block:: typoscript
 
-.. note::
+      plugin.tx_oauth2client.view {
+          templateRootPaths.100 = EXT:site_package/Resources/Private/Templates/
+          partialRootPaths.100 = EXT:site_package/Resources/Private/Partials/
+      }
 
-   Currently no recursive lookup within this folder is implemented
+Backend login
+   Add template paths for :file:`Resources/Private/Templates/Backend/Oauth2LoginProvider.html`:
 
-Callback configuration (within the remote OAuth2 provider settings)
--------------------------------------------------------------------
+   .. code-block:: php
 
-The extension provides defined callback URLs to which the OAuth2 providers redirect in case of authorization requests.
-In the backend context these are fixed and in the frontend context they can be configured.
-For each context (frontend / backend) 2 callback URL's are needed which have to be configured in the OAuth2 providers.
+      $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['oauth2_client']['view'] = [
+          'templateRootPaths' => ['EXT:site_package/Resources/Private/Templates/Backend/'],
+          'partialRootPaths' => ['EXT:site_package/Resources/Private/Partials/Backend/'],
+          'layoutRootPaths' => ['EXT:site_package/Resources/Private/Layouts/Backend/'],
+          // optional, default "Oauth2LoginProvider"
+          'template' => 'Oauth2LoginProvider',
+      ];
 
-.. note::
+.. _configuration-providers:
 
-   The OAuth2 providers behave differently in the way they validate the callback URLs.
-   Some compare only the URL without query parameters and the query paramaters are not relevant and for some you have to configure the complete url including the query parameters.
-
-   In addition, the callback urls to be used for backend logins differ between TYPO3 v10 and TYPO3 v11!
-
-Backend
-~~~~~~~
-
-To make OAuth2 backend login authorizations work, the following callback URL must be configured in the OAuth2 provider
-
-TYPO3 v11: :html:`https://your-typo3-site.example.com/typo3/login?loginProvider=1616569531&oauth2-provider=<provider-identifier>&login_status=login&commandLI=attempt`
-
-TYPO3 v10: :html:`https://your-typo3-site.example.com/typo3/index.php?route=%2Flogin&loginProvider=1616569531&oauth2-provider=<provider-identifier>&login_status=login&commandLI=attempt`
-
-.. note::
-
-   Replace `your-typo3-site.example.com` with the domain of your project and `<provider-identifier>` with your OAuth2 provider configuration identifier (:php:`$GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['oauth2_client']['providers'][<provider-identifier>]`).
-
-For the registration of OAuth2 providers for backend users the following callback URL must be configured in the OAuth2 provider
-
-TYPO3 v11: :html:`https://your-typo3-site.example.com/typo3/oauth2/callback/handle?oauth2-provider=<provider-identifier>&action=callback`
-
-TYPO3 v10: :html:`https://your-typo3-site.example.com/typo3/index.php?route=%2Foauth2%2Fcallback%2Fhandle&oauth2-provider=<provider-identifier>&action=callback`
-
-.. note::
-
-   Replace `your-typo3-site.example.com` with the domain of your project and `<provider-identifier>` with your OAuth2 provider configuration identifier (:php:`$GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['oauth2_client']['providers'][<provider-identifier>]`).
-
-Frontend
-~~~~~~~~
-
-In the fontend context the callback-slug can be configured within the site / site language settings.
-If this setting is empty, the default callback-slug `_oauth2` is used.
-Make sure you use a callback-slug that does not match any slug of a TYPO3 page in your project.
-
-   .. figure:: ../Images/Frontend/administrateCallbackSlug.png
-      :class: with-shadow
-      :alt: TYPO3 site language module with configured callback-slug
-      :width: 600px
-
-      Manage frontend OAuth2 callback-slug
-
-To make OAuth2 frontend login authorizations work, the following callback URL must be configured in the OAuth2 provider
-
-:html:`https://your-typo3-site.example.com/<callback-slug>?oauth2-provider=<provider-identifier>&logintype=login`
-
-.. note::
-
-   Replace `your-typo3-site.example.com` with the domain of your project and `<provider-identifier>` with your OAuth2 provider configuration identifier (:php:`$GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['oauth2_client']['providers'][<provider-identifier>]`).
-   Replace `<callback-slug>` with the configured callback-slug within your site / site language settings (or with `_oauth2` if you have not configured anything).
-
-For the registration of OAuth2 providers for frontend users the following callback URL must be configured in the OAuth2 provider
-
-:html:`https://your-typo3-site.example.com/<callback-slug>?oauth2-provider=<provider-identifier>&tx_oauth2client%5Baction%5D=verify`
-
-.. note::
-
-   Replace `your-typo3-site.example.com` with the domain of your project and `<provider-identifier>` with your OAuth2 provider configuration identifier (:php:`$GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['oauth2_client']['providers'][<provider-identifier>]`).
-   Replace `<callback-slug>` with the configured callback-slug within your site / site language settings (or with `_oauth2` if you have not configured anything).
-
-Frontend redirect behavior
---------------------------
-
-By default, after an OAuth2 login or OAuth2 provider registration, the extension redirects to the page where the OAuth2 login or OAuth2 provider registration took place.
-But the page to which you are redirected after a login or registration can be specially defined if required.
-
-Be aware that you have to create the links for an OAuth2 login or OAuth2 provider registration manually.
-If you append :html:`after-oauth2-redirect-uri=https://your-typo3-site.example.com/sales/` to the links, the extension will redirect to the URL `https://your-typo3-site.example.com/sales/` after an OAuth2 login or OAuth2 provider registration.
-
-.. note::
-   The custom redirect url must not be relative to the current page and must point to the same host on which the project is accessible.
-   You cannot redirect to external pages or to pages of other page trees (sites).
-
-An example of an Oauth2 login URL would look like this: :html:`https://your-typo3-site.example.com/some-site?oauth2-provider=<provider-identifier>&logintype=login&after-oauth2-redirect-uri=https://your-typo3-site.example.com/sales/`.
-
-.. note::
-   You do not need to include the :html:`after-oauth2-redirect-uri=https://your-typo3-site.example.com/sales/` part in the callback URL configuration of your OAuth2 provider.
-
-However, this feature is disabled by default for security reasons.
-If you want to use it you have to turn on the feature flag :php:`$GLOBALS['TYPO3_CONF_VARS']['SYS']['features']['oauth2.frontend.login.afterOauth2RedirectUriFromQuery'] = true`; within the file :file:`AdditionalConfiguration.php` (or :file:`LocalConfiguration.php`):
-
-Specific Providers (Examples)
------------------------------
+Provider examples
+=================
 
 .. toctree::
    :maxdepth: 1
+   :titlesonly:
 
+   Authentik
+   EntraId
+   Keycloak
    Gitlab
    Github
    Google
-   Keycloak
    Hydra
-
-Login provider templates
-------------------------
-
-If you need to customize the login template :file:`Resources/Private/Templates/Backend/Oauth2LoginProvider.html` you can override it by adding your own fluid template search paths.
-
-Example:
-
-.. code-block:: php
-
-   $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['oauth2_client'] = [
-       'view' => [
-           // add some additional layout search paths:
-           'layoutRootPaths' => [
-               'EXT:site_package/Resources/Private/Layouts/Backend/',
-           ],
-           // add some additional template search paths:
-           'templateRootPaths' => [
-               'EXT:site_package/Resources/Private/Templates/Backend/',
-           ],
-           // add some additional partial search paths:
-           'partialRootPaths' => [
-               'EXT:site_package/Resources/Private/Partials/Backend/',
-           ],
-           // you can override the template name too:
-           'template' => 'Oauth2LoginProvider',
-       ],
-   ];
-

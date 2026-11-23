@@ -1,16 +1,16 @@
-.. every .rst file should include Includes.txt
-.. use correct path!
-
 .. include:: Includes.txt
-
-.. Every manual should have a start label for cross-referencing to
-.. start page. Do not remove this!
 
 .. _start:
 
 ================================================
 TYPO3 OAuth2 login client (backend and frontend)
 ================================================
+
+:Extension key:
+   oauth2_client
+
+:Package name:
+   co-stack/typo3-oauth2-client
 
 :Version:
    |release|
@@ -24,54 +24,41 @@ TYPO3 OAuth2 login client (backend and frontend)
 :Email:
    maik.schneider@xima.de
 
-:Website:
-   https://www.xima.de
-
 :License:
    This extension documentation is published under the
    `CC BY-NC-SA 4.0 <https://creativecommons.org/licenses/by-nc-sa/4.0/>`__ (Creative Commons)
    license
 
-Screenshots
-===========
+----
+
+Backend and frontend users log in to TYPO3 with an OAuth2 / OpenID Connect
+provider such as authentik, Microsoft Entra ID, Keycloak, GitLab, GitHub or Google.
+Each user links the provider account to their existing TYPO3 account once and
+can then log in with it.
 
 .. figure:: Images/Backend/loginScreen.png
    :class: with-shadow
    :alt: TYPO3 backend login screen with configured OAuth2 providers
    :width: 300px
 
-   TYPO3 backend login screen with configured OAuth2 providers
+   Backend login with two configured providers
 
 .. figure:: Images/Frontend/loginScreen.png
    :class: with-shadow
    :alt: TYPO3 frontend login screen with configured OAuth2 providers
-   :width: 300px
+   :width: 500px
 
-   TYPO3 frontend login screen with configured OAuth2 providers
-
-Overview
-========
+   Frontend login (felogin) with two configured providers
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 2
+   :titlesonly:
 
    Introduction/Index
    Installation/Index
    Configuration/Index
    UserGuide/Index
+   Upgrade/Index
    Developers/Index
    Changelog
    Sitemap
-
-
-Want to report an issue or contribute?
-=======================================
-
-Join us on `GitHub <https://github.com/xima-media/typo3-oauth2-client>`__
-
-
-Found a mistake in the manual?
-------------------------------
-
-You are welcome to help improve this guide.
-Just click on "Edit me on GitHub" on the top right to submit your change request.
