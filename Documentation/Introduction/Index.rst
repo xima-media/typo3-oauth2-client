@@ -11,71 +11,68 @@ Introduction
 What does it do?
 ================
 
-TYPO3 Backend
-^^^^^^^^^^^^^
+The extension adds OAuth2 / OpenID Connect logins to TYPO3:
 
-Allow your backend users to add login possibilities via any OAuth2 provider. Popular examples are Github or Gitlab, Google, Facebook
-or LinkedIn or classically self-hosted solutions like Keycloak.
+*  **Backend login:** the TYPO3 login screen gets a "Login with OAuth2
+   providers" option with one button per configured provider.
+*  **Frontend login:** felogin (or any link) starts a login with a provider.
+*  **Users link their own accounts:** backend users link a provider in their
+   user settings, frontend users in the "Manage OAuth2 providers" plugin.
+   A user can link several providers and unlink them again.
+*  **Per-site frontend setup:** each site (or site language) chooses its
+   providers, its frontend user storage folder and its callback slug.
+*  **Any OAuth2 provider:** the extension builds on
+   `league/oauth2-client <https://oauth2-client.thephpleague.com>`__. Its
+   ``GenericProvider`` works with every provider that has an authorization,
+   a token and a user info endpoint. With Composer you can also use a provider
+   package, for example ``league/oauth2-github``.
+*  **Backend MFA stays in place:** after an OAuth2 backend login, TYPO3 still
+   asks for the multi-factor authentication of the user.
 
-The extension allows administrators/integrators to configure various OAuth2 providers and offers any backend user an interface to add their
-OAuth2 based login.
+.. _how-linking-works:
 
-This extension is especially powerful in combination with the Multi-Factor Capabilities of TYPO3 as you can provide users with a single-sign-on login of their choice and add additional security of MFA to TYPO3.
+How linking works
+=================
 
-.. figure:: ../Images/Backend/loginScreen.png
-   :class: with-shadow
-   :alt: TYPO3 backend login screen with configured OAuth2 providers
-   :width: 300px
+The extension never creates or changes TYPO3 users. It stores an *identity*:
+the provider identifier plus the user ID the provider returns. At login, it
+looks up the TYPO3 user that owns this identity.
 
-   Let a backend user login with any available OAuth2 provider.
+#. An administrator configures the providers.
+#. A user logs in once with username and password.
+#. Backend users open :guilabel:`User Settings` > :guilabel:`Account security`
+   > :guilabel:`Manage OAuth2 providers` and click :guilabel:`Activate`.
+   Frontend users click :guilabel:`Activate` in the "Manage OAuth2 providers"
+   plugin.
+#. The user signs in at the provider. TYPO3 stores the identity.
+#. From now on the user can log in with the provider.
 
 .. figure:: ../Images/Backend/configuredProviders.png
    :class: with-shadow
-   :alt: TYPO3 user setup module with configured OAuth2 providers
+   :alt: Backend module "OAuth2 providers" with an active and an inactive provider
    :width: 600px
 
-   Let a backend user choose which OAuth2 provider to log in with via user setup module.
-
-.. figure:: ../Images/Backend/beUser.png
-   :class: with-shadow
-   :alt: TYPO3 backend user configuration with enabled OAuth2 logins and Multi-Factor authentication
-   :width: 600px
-
-   Use OAuth2 in conjunction with Multi-Factor authentication.
-
-TYPO3 Frontend
-^^^^^^^^^^^^^^
-
-Allow your frontend users to add login possibilities via any OAuth2 provider. Popular examples are Github or Gitlab, Google, Facebook
-or LinkedIn or classically self-hosted solutions like Keycloak.
-
-The extension allows administrators/integrators to configure various OAuth2 providers on a site or site language level and offers any frontend user an interface to add their
-OAuth2 based login.
-
-.. figure:: ../Images/Frontend/loginScreen.png
-   :class: with-shadow
-   :alt: TYPO3 frontend login screen
-   :width: 600px
-
-   Let a frontend user login with any available OAuth2 provider.
+   A backend user manages the linked providers.
 
 .. figure:: ../Images/Frontend/configuredProviders.png
    :class: with-shadow
-   :alt: TYPO3 frontend plugin with configured OAuth2 providers
-   :width: 600px
+   :alt: Frontend plugin "Manage OAuth2 providers" with an active and an inactive provider
+   :width: 500px
 
-   Let a logged in frontend user choose which OAuth2 provider to log in with
+   A frontend user manages the linked providers.
 
-.. figure:: ../Images/Frontend/administrateAvailableProviders.png
-   :class: with-shadow
-   :alt: TYPO3 site language module with OAuth2 providers
-   :width: 600px
+.. _what-it-does-not-do:
 
-   Administrate available OAuth2 providers on a site or site language level.
+What it does not do
+===================
 
-.. figure:: ../Images/Frontend/feUser.png
-   :class: with-shadow
-   :alt: TYPO3 frontend user configuration with enabled OAuth2 logins
-   :width: 600px
-
-   Revoke frontend user OAuth2 provider activations.
+*  **No user provisioning.** Users without a TYPO3 account, or without a linked
+   identity, cannot log in. To create or update users from provider data
+   (including group mapping), use the add-on
+   `xima/xima-oauth2-extended <https://github.com/xima-media/xima-oauth2-extended>`__
+   or write your own listener for the :ref:`lookup events <developer-events>`.
+*  **No ID token validation.** The user is read from the user info endpoint of
+   the provider (``urlResourceOwnerDetails``).
+*  **No PKCE.** Do not set the ``pkceMethod`` option yet: the code verifier is
+   not kept between the redirect and the callback.
+*  **No single logout.** Logging out of TYPO3 does not log out of the provider.
