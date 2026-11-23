@@ -1,7 +1,0 @@
-includes:
-	- phpstan.baseline-v10.neon
-parameters:
-	checkMissingIterableValueType: false
-	level: max
-	paths:
-		- ../Classes

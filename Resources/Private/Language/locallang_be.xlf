@@ -105,6 +105,9 @@
             <trans-unit id="plugin.manage_providers" resname="plugin.manage_providers">
                 <source>Manage OAuth2 providers</source>
             </trans-unit>
+            <trans-unit id="plugin.manage_providers.description" resname="plugin.manage_providers.description">
+                <source>Let frontend users configure their own OAuth2 providers for logging in to the frontend.</source>
+            </trans-unit>
         </body>
     </file>
 </xliff>

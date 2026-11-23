@@ -1,0 +1,48 @@
+name: Static Code Analysis
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+      - feature/v14
+
+permissions:
+  contents: read
+
+jobs:
+  sca:
+    name: SCA
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup DDEV
+        uses: ddev/github-action-setup-ddev@v1
+        with:
+          autostart: false
+
+      - name: Install Composer dependencies
+        run: |
+          ddev start
+          ddev composer config github-oauth.github.com ${{ secrets.GITHUB_TOKEN }}
+          ddev composer install --no-progress
+
+      # TER releases ship Resources/Private/Libs and its ext_emconf.php autoload for classic mode, so both must match composer.json
+      - name: Check bundled libraries
+        run: |
+          ddev composer libs:bundle
+          if [ -n "$(git status --porcelain -- composer.json ext_emconf.php Resources/Private/Libs)" ]; then
+            git status --short -- composer.json ext_emconf.php Resources/Private/Libs
+            git diff -- composer.json ext_emconf.php
+            echo "::error::Bundled libraries are outdated. Run 'composer libs:bundle' and commit the result."
+            exit 1
+          fi
+
+      - name: Composer audit
+        run: ddev composer audit --abandoned=report
+
+      - name: Run static code analysis
+        run: ddev composer ci:sca

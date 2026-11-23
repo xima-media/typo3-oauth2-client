@@ -7,63 +7,46 @@
     "type": "typo3-cms-extension",
     "authors": [
         {
-            "name": "Oliver Eglseder",
-            "email": "oliver.eglseder@co-stack.com",
-            "homepage": "https://www.co-stack.com/",
-            "role": "Developer"
-        },
-        {
-            "name": "waldhacker",
-            "email": "hello@waldhacker.dev",
-            "homepage": "https://waldhacker.dev",
-            "role": "Developer"
+            "name": "Maik Schneider",
+            "email": "maik.schneider@xima.de",
+            "homepage": "https://www.xima.de",
+            "role": "Maintainer"
         }
     ],
-    "homepage": "https://gitlab.com/co-stack.com/co-stack.com/typo3-extensions/typo3-oauth2-client",
+    "homepage": "https://github.com/xima-media/typo3-oauth2-client",
     "support": {
-        "issues": "https://gitlab.com/co-stack.com/co-stack.com/typo3-extensions/typo3-oauth2-client/-/issues"
+        "issues": "https://github.com/xima-media/typo3-oauth2-client/issues",
+        "source": "https://github.com/xima-media/typo3-oauth2-client"
     },
     "require": {
-        "php": "^8.1",
+        "php": "^8.2",
         "ext-pdo": "*",
         "league/oauth2-client": "^2.7",
         "psr/log": "*",
-        "typo3/cms-backend": "^12.4@dev || ^13.4@dev",
-        "typo3/cms-core": "^12.4@dev || ^13.4@dev",
-        "typo3/cms-fluid": "^12.4@dev || ^13.4@dev",
-        "typo3/cms-setup": "^12.4@dev || ^13.4@dev"
+        "typo3/cms-backend": "^13.4 || ^14.3",
+        "typo3/cms-core": "^13.4 || ^14.3",
+        "typo3/cms-fluid": "^13.4 || ^14.3"
     },
     "require-dev": {
+        "eliashaeussler/typo3-vendor-bundler": "^4.1",
         "ergebnis/composer-normalize": "^2.23",
         "friendsofphp/php-cs-fixer": "^3.0",
-        "overtrue/phplint": "^9.2",
-        "phpspec/prophecy-phpunit": "^2.0",
         "phpstan/extension-installer": "^1.0",
-        "roave/security-advisories": "dev-latest",
-        "saschaegerer/phpstan-typo3": "@dev",
-        "symfony/yaml": "^5.1 || ^6.4",
-        "typo3/cms-extensionmanager": "^12.4@dev || ^13.4@dev",
-        "typo3/cms-felogin": "^12.4@dev || ^13.4@dev",
-        "typo3/cms-fluid-styled-content": "^12.4@dev || ^13.4@dev",
-        "typo3/cms-frontend": "^12.4@dev || ^13.4@dev",
-        "typo3/cms-install": "^12.4@dev || ^13.4@dev",
-        "typo3/cms-recordlist": "^12.4@dev || ^13.4@dev",
-        "typo3/coding-standards": "^0.4.0",
-        "typo3/json-response": "*@dev",
-        "typo3/testing-framework": "^7.0 || ^8.0.9",
-        "vimeo/psalm": "^3.0 || ^4.0 || ^5.0",
-        "co-stack/typo3-oauth2-client-test": "*@dev"
+        "saschaegerer/phpstan-typo3": "^3.0",
+        "symfony/yaml": "^6.4 || ^7.0",
+        "typo3/cms-extensionmanager": "^13.4 || ^14.3",
+        "typo3/cms-felogin": "^13.4 || ^14.3",
+        "typo3/cms-fluid-styled-content": "^13.4 || ^14.3",
+        "typo3/cms-frontend": "^13.4 || ^14.3",
+        "typo3/cms-install": "^13.4 || ^14.3",
+        "typo3/cms-setup": "^13.4 || ^14.3",
+        "typo3/coding-standards": "^0.8.0",
+        "typo3/testing-framework": "^8.2 || ^9.0"
     },
     "suggest": {
-        "league/oauth2-github": "Github Authentication"
+        "league/oauth2-github": "Github Authentication",
+        "typo3/cms-setup": "Required on TYPO3 13.4 to manage providers in the user settings (part of typo3/cms-backend since 14.3)"
     },
-    "repositories": [
-        {
-            "type": "path",
-            "url": "build/Tests/Extensions/*"
-        }
-    ],
-    "minimum-stability": "dev",
     "prefer-stable": true,
     "autoload": {
         "psr-4": {
@@ -78,14 +61,15 @@
     "config": {
         "allow-plugins": {
             "composer/package-versions-deprecated": true,
+            "eliashaeussler/typo3-vendor-bundler": true,
             "ergebnis/composer-normalize": true,
             "phpstan/extension-installer": true,
             "typo3/class-alias-loader": true,
             "typo3/cms-composer-installers": true
         },
-        "bin-dir": ".build/bin",
+        "lock": false,
         "sort-packages": true,
-        "vendor-dir": ".build/vendor"
+        "vendor-dir": "vendor"
     },
     "extra": {
         "composer-normalize": {
@@ -93,55 +77,30 @@
             "indent-style": "space"
         },
         "typo3/cms": {
-            "cms-package-dir": "{$vendor-dir}/typo3/cms",
             "extension-key": "oauth2_client",
-            "web-dir": ".build/web"
+            "web-dir": "public"
         }
     },
     "scripts": {
-        "post-autoload-dump": [
-            "mkdir -p .build/web/typo3conf/ext/",
-            "[ -L .build/web/typo3conf/ext/oauth2_client ] || ln -snvf ../../../../. .build/web/typo3conf/ext/oauth2_client"
+        "ci:composer:normalize": "@composer normalize --no-check-lock --dry-run",
+        "ci:composer:validate": "@composer validate --no-check-lock",
+        "ci:php:fixer": "php-cs-fixer fix --config build/phpcs.dist --dry-run --diff",
+        "ci:php:lint": "find . -name '*.php' ! -path './vendor/*' ! -path './public/*' ! -path './var/*' ! -path '*/node_modules/*' -print0 | xargs -0 -n 1 -P 4 php -l",
+        "ci:php:stan": "phpstan analyse --configuration build/phpstan.neon --no-progress",
+        "ci:sca": [
+            "@ci:composer:validate",
+            "@ci:composer:normalize",
+            "@ci:php:lint",
+            "@ci:php:fixer",
+            "@ci:php:stan",
+            "@ci:yaml:lint"
         ],
-        "ci:cgl:check": [
-            "php-cs-fixer fix --config build/phpcs.dist -v --dry-run"
-        ],
-        "ci:cgl:fix": [
-            "php-cs-fixer fix --config build/phpcs.dist"
-        ],
-        "ci:lint:php": [
-            "phplint -c build/phplint.yaml"
-        ],
-        "ci:lint:yaml": [
-            "php build/yaml-lint.php Configuration/"
-        ],
-        "ci:normalize:check": [
-            "@composer normalize --dry-run"
-        ],
-        "ci:normalize:fix": [
-            "@composer normalize"
-        ],
-        "ci:psalm": [
-            "psalm --config=build/psalm.xml"
-        ],
-        "ci:psalm:gen-baseline": [
-            "psalm -c build/psalm.xml --set-baseline=build/psalm-baseline.xml"
-        ],
-        "ci:stan": [
-            "phpstan analyze --configuration build/phpstan.neon"
-        ],
-        "ci:stan:gen-baseline": [
-            "phpstan analyze --configuration build/phpstan.neon --generate-baseline build/phpstan.baseline.neon"
-        ],
-        "ci:tests:functional": [
-            "phpunit -c build/phpunit-functionals.xml --log-junit .build/logs/junit-functionals.xml"
-        ],
-        "ci:tests:unit": [
-            "phpunit -c build/phpunit.xml --log-junit .build/logs/junit.xml"
-        ],
-        "ci:tests:unit:cover": [
-            "mkdir -p .build/logs",
-            "phpdbg -d memory_limit=1024M -qrr ./.build/bin/phpunit -c build/phpunit.xml --coverage-text --colors=never --coverage-clover .build/logs/clover.xml --coverage-cobertura .build/logs/cobertura.xml --coverage-html .build/logs/html"
-        ]
+        "ci:yaml:lint": "find . ! -path './vendor/*' ! -path './public/*' ! -path './var/*' ! -path '*/node_modules/*' \\( -name '*.yaml' -o -name '*.yml' \\) -print0 | xargs -0 -r yaml-lint",
+        "composer:normalize": "@composer normalize --no-check-lock",
+        "libs:bundle": "bash build/bundle-libraries.sh",
+        "php:fixer": "php-cs-fixer fix --config build/phpcs.dist",
+        "php:stan:baseline": "phpstan analyse --configuration build/phpstan.neon --no-progress --generate-baseline build/phpstan.baseline.neon",
+        "test:functional": "phpunit -c phpunit.functional.xml",
+        "test:unit": "phpunit -c phpunit.unit.xml"
     }
 }

@@ -14,8 +14,8 @@ return [
                 'oauth2-provider' => true,
                 'action' => true,
                 'code' => true,
-                'state' => true
-            ]
+                'state' => true,
+            ],
         ],
         'target' => AuthorizeController::class . '::handleRequest',
     ],
@@ -26,5 +26,5 @@ return [
     'oauth2_manage_providers' => [
         'path' => '/oauth2/manage/providers',
         'target' => ManageProvidersController::class,
-    ]
+    ],
 ];

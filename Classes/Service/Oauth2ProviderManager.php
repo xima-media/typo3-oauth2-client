@@ -2,23 +2,8 @@
 
 declare(strict_types=1);
 
-/*
- * This file is part of the OAuth2 Client extension for TYPO3
- * - (c) 2021 waldhacker UG (haftungsbeschränkt)
- *
- * It is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License, either version 2
- * of the License, or any later version.
- *
- * For the full copyright and license information, please read the
- * LICENSE.txt file that was distributed with this source code.
- *
- * The TYPO3 project - inspiring people to share!
- */
-
 namespace Waldhacker\Oauth2Client\Service;
 
-use InvalidArgumentException;
 use League\OAuth2\Client\Provider\AbstractProvider;
 use League\OAuth2\Client\Provider\GenericProvider;
 use Psr\Http\Message\ServerRequestInterface;
@@ -82,7 +67,7 @@ class Oauth2ProviderManager
     public function createProvider(string $providerId, ?string $redirectUrl = null): AbstractProvider
     {
         if (!isset($this->providerConfigurations[$providerId])) {
-            throw new InvalidArgumentException('No such provider: ' . $providerId, 1642867944);
+            throw new \InvalidArgumentException('No such provider: ' . $providerId, 1642867944);
         }
         $provider = $this->providerConfigurations[$providerId];
         $options = $provider->getOptions();
@@ -118,7 +103,7 @@ class Oauth2ProviderManager
     {
         $providers = array_filter(
             $this->getConfiguredProviders() ?? [],
-            static fn (ProviderConfiguration $provider): bool => $provider->hasScope(self::SCOPE_BACKEND)
+            static fn(ProviderConfiguration $provider): bool => $provider->hasScope(self::SCOPE_BACKEND)
         );
         if (count($providers) > 0) {
             return $providers;
@@ -130,7 +115,7 @@ class Oauth2ProviderManager
     {
         $providers = array_filter(
             $this->getConfiguredProviders() ?? [],
-            static fn (ProviderConfiguration $provider): bool => $provider->hasScope(self::SCOPE_FRONTEND)
+            static fn(ProviderConfiguration $provider): bool => $provider->hasScope(self::SCOPE_FRONTEND)
         );
         if (count($providers) > 0) {
             return $providers;
@@ -149,13 +134,15 @@ class Oauth2ProviderManager
 
         $siteConfiguration = $site->getConfiguration();
         $languageConfiguration = $language->toArray();
-        $enabledProviderIds = empty($languageConfiguration['enabled_oauth2_providers'])
-              ? GeneralUtility::trimExplode(',', $siteConfiguration['enabled_oauth2_providers'] ?? '')
-              : GeneralUtility::trimExplode(',', $languageConfiguration['enabled_oauth2_providers']);
+        $enabledProviderIds = $languageConfiguration['enabled_oauth2_providers'] ?? $siteConfiguration['enabled_oauth2_providers'] ?? null;
+        $enabledProviderIds = is_string($enabledProviderIds) ? GeneralUtility::trimExplode(',', $enabledProviderIds, true) : $enabledProviderIds;
+        if (!is_array($enabledProviderIds)) {
+            return null;
+        }
 
         $configuredEnabledProviders = array_filter(
             $this->getConfiguredFrontendProviders() ?? [],
-            static fn (ProviderConfiguration $provider): bool
+            static fn(ProviderConfiguration $provider): bool
                 => in_array($provider->getIdentifier(), $enabledProviderIds)
         );
 

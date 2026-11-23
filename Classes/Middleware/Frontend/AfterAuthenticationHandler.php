@@ -2,20 +2,6 @@
 
 declare(strict_types=1);
 
-/*
- * This file is part of the OAuth2 Client extension for TYPO3
- * - (c) 2021 waldhacker UG (haftungsbeschränkt)
- *
- * It is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License, either version 2
- * of the License, or any later version.
- *
- * For the full copyright and license information, please read the
- * LICENSE.txt file that was distributed with this source code.
- *
- * The TYPO3 project - inspiring people to share!
- */
-
 namespace Waldhacker\Oauth2Client\Middleware\Frontend;
 
 use Psr\Container\ContainerExceptionInterface;
@@ -49,8 +35,7 @@ class AfterAuthenticationHandler implements MiddlewareInterface
         private readonly RedirectRequestService $redirectRequestService,
         private readonly Context $context,
         private readonly ResponseFactoryInterface $responseFactory
-    ) {
-    }
+    ) {}
 
     /**
      * @throws ContainerExceptionInterface
@@ -102,14 +87,13 @@ class AfterAuthenticationHandler implements MiddlewareInterface
                 $subRequest = $this->requestStates->setCurrentAction(RequestStates::ACTION_LOGIN_DONE, $subRequest);
 
                 unset($_COOKIE[$this->sessionManager->getOAuth2CookieName($request)]);
-                /** @var FrontendUserAuthentication $frontendUser */
                 $frontendUser = $request->getAttribute('frontend.user');
                 /** @var UserAspect $frontendUserAspect */
                 $frontendUserAspect = $this->context->getAspect('frontend.user');
                 $userIsLoggedIn = $frontendUser instanceof FrontendUserAuthentication
                     && $frontendUserAspect->isLoggedIn();
                 if ($userIsLoggedIn) {
-                    $sessionId = $request->getAttribute('frontend.user')->getSession()->getIdentifier();
+                    $sessionId = $frontendUser->getSession()->getIdentifier();
 
                     $_COOKIE = array_replace_recursive(
                         $_COOKIE,
@@ -117,7 +101,7 @@ class AfterAuthenticationHandler implements MiddlewareInterface
                     );
                 }
 
-                $subRequest = $subRequest->withCookieParams($_COOKIE ?? []);
+                $subRequest = $subRequest->withCookieParams($_COOKIE);
                 $GLOBALS['TSFE'] = null;
 
                 $response = $this->performSubRequest($subRequest);
@@ -146,14 +130,11 @@ class AfterAuthenticationHandler implements MiddlewareInterface
                 ->createResponse(302, 'OAuth2: Done. Redirection to original requested location')
                 ->withHeader('location', $redirectUri);
 
-            /** @var FrontendUserAuthentication $frontendUser */
             $frontendUser = $request->getAttribute('frontend.user');
             /** @var UserAspect $frontendUserAspect */
             $frontendUserAspect = $this->context->getAspect('frontend.user');
-            $userIsLoggedIn = $frontendUser instanceof FrontendUserAuthentication
-                && $frontendUserAspect->isLoggedIn();
-            if ($userIsLoggedIn) {
-                $response = $request->getAttribute('frontend.user')->appendCookieToResponse($response);
+            if ($frontendUser instanceof FrontendUserAuthentication && $frontendUserAspect->isLoggedIn()) {
+                $response = $frontendUser->appendCookieToResponse($response, $request->getAttribute('normalizedParams'));
             }
 
             return $this->sessionManager->appendRemoveOAuth2CookieToResponse($response, $request);

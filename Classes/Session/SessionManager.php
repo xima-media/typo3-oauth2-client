@@ -2,25 +2,8 @@
 
 declare(strict_types=1);
 
-/*
- * This file is part of the OAuth2 Client extension for TYPO3
- * - (c) 2021 waldhacker UG (haftungsbeschränkt)
- *
- * It is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License, either version 2
- * of the License, or any later version.
- *
- * For the full copyright and license information, please read the
- * LICENSE.txt file that was distributed with this source code.
- *
- * The TYPO3 project - inspiring people to share!
- */
-
 namespace Waldhacker\Oauth2Client\Session;
 
-use DateTimeImmutable;
-use DateTimeInterface;
-use InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\HttpFoundation\Cookie;
@@ -47,11 +30,11 @@ class SessionManager
 
     private array $userSessionManagers = [
         self::REQUEST_TYPE_FE => null,
-        self::REQUEST_TYPE_BE => null
+        self::REQUEST_TYPE_BE => null,
     ];
     private array $userSessions = [
         self::REQUEST_TYPE_FE => null,
-        self::REQUEST_TYPE_BE => null
+        self::REQUEST_TYPE_BE => null,
     ];
 
     public function getSessionData(string $key, ?ServerRequestInterface $request = null): mixed
@@ -132,7 +115,7 @@ class SessionManager
         return $cookieName . '_oauth2';
     }
 
-    private function getUserSession(string $requestType, ServerRequestInterface $request): ?UserSession
+    private function getUserSession(string $requestType, ServerRequestInterface $request): UserSession
     {
         if ($this->userSessions[$requestType] === null) {
             $this->userSessions[$requestType] = $this->createUserSession($requestType, $request);
@@ -146,7 +129,7 @@ class SessionManager
             ->createFromRequestOrAnonymous($request, $this->getOAuth2CookieName($request));
     }
 
-    private function getUserSessionManager(string $requestType): ?UserSessionManager
+    private function getUserSessionManager(string $requestType): UserSessionManager
     {
         if ($this->userSessionManagers[$requestType] === null) {
             $this->userSessionManagers[$requestType] = $this->createUserSessionManager($requestType);
@@ -178,7 +161,7 @@ class SessionManager
         $sessionId = self::encodeHashSignedJwt(
             [
                 'identifier' => $sessionId,
-                'time' => (new DateTimeImmutable())->format(DateTimeInterface::RFC3339),
+                'time' => (new \DateTimeImmutable())->format(\DateTimeInterface::RFC3339),
             ],
             self::createSigningKeyFromEncryptionKey(UserSession::class)
         );
@@ -217,7 +200,7 @@ class SessionManager
         $frontendRequestType = $this->isFrontendRequest($request) ? self::REQUEST_TYPE_FE : null;
         $requestType = $this->isBackendRequest($request) ? self::REQUEST_TYPE_BE : $frontendRequestType;
         if (!in_array($requestType, [self::REQUEST_TYPE_FE, self::REQUEST_TYPE_BE], true)) {
-            throw new InvalidArgumentException('Invalid request type', 1642868012);
+            throw new \InvalidArgumentException('Invalid request type', 1642868012);
         }
         return $requestType;
     }
@@ -236,7 +219,7 @@ class SessionManager
     {
         $request = $request ?? $GLOBALS['TYPO3_REQUEST'] ?? ServerRequestFactory::fromGlobals();
         if (!($request instanceof ServerRequestInterface)) {
-            throw new InvalidArgumentException(
+            throw new \InvalidArgumentException(
                 sprintf('Request must implement "%s"', ServerRequestInterface::class),
                 1643445716
             );

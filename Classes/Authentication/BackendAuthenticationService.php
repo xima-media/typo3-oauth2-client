@@ -2,24 +2,9 @@
 
 declare(strict_types=1);
 
-/*
- * This file is part of the OAuth2 Client extension for TYPO3
- * - (c) 2021 waldhacker UG (haftungsbeschränkt)
- *
- * It is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License, either version 2
- * of the License, or any later version.
- *
- * For the full copyright and license information, please read the
- * LICENSE.txt file that was distributed with this source code.
- *
- * The TYPO3 project - inspiring people to share!
- */
-
 namespace Waldhacker\Oauth2Client\Authentication;
 
 use Doctrine\DBAL\Exception;
-use InvalidArgumentException;
 use League\OAuth2\Client\Provider\ResourceOwnerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
@@ -50,8 +35,7 @@ class BackendAuthenticationService extends AbstractAuthenticationService
         private readonly UriBuilder $uriBuilder,
         private readonly ResponseFactoryInterface $responseFactory,
         private readonly EventDispatcherInterface $eventDispatcher,
-    ) {
-    }
+    ) {}
 
     /**
      * @return ?array
@@ -108,7 +92,7 @@ class BackendAuthenticationService extends AbstractAuthenticationService
         return -100;
     }
 
-    public function processLoginData(array &$loginData, string $_): bool
+    public function processLoginData(array &$loginData): bool
     {
         $loginData['uname'] = $loginData['uname'] ?? '';
         $loginData['uident'] = $loginData['uident'] ?? '';
@@ -217,7 +201,7 @@ class BackendAuthenticationService extends AbstractAuthenticationService
     {
         $request = $GLOBALS['TYPO3_REQUEST'] ?? ServerRequestFactory::fromGlobals();
         if (!($request instanceof ServerRequestInterface)) {
-            throw new InvalidArgumentException(
+            throw new \InvalidArgumentException(
                 sprintf('Request must implement "%s"', ServerRequestInterface::class),
                 1643446001
             );

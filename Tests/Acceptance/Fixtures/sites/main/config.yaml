@@ -1,0 +1,27 @@
+base: 'http://%env(DDEV_HOSTNAME)%/'
+rootPageId: 1
+websiteTitle: 'OAuth2 Client'
+dependencies:
+  - typo3/fluid-styled-content
+  - typo3/felogin
+enabled_oauth2_providers: 'mock,mock-fe'
+oauth2_storage_pid: 2
+languages:
+  -
+    title: English
+    enabled: true
+    languageId: 0
+    base: /
+    locale: en_US.UTF-8
+    navigationTitle: English
+    flag: us
+  -
+    title: German
+    enabled: true
+    languageId: 1
+    base: /de/
+    locale: de_DE.UTF-8
+    navigationTitle: Deutsch
+    flag: de
+    fallbackType: strict
+    enabled_oauth2_providers: mock

@@ -11,6 +11,8 @@ defined('TYPO3') or die();
         'oauth2Client',
         'ManageProviders',
         $languageFile . 'plugin.manage_providers',
-        'oauth2_client_plugin_manage_providers'
+        'oauth2_client_plugin_manage_providers',
+        'plugins',
+        $languageFile . 'plugin.manage_providers.description',
     );
 })();

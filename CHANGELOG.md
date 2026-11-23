@@ -1,6 +1,35 @@
 # Changelog
 
 
+## 5.0.0 (unreleased)
+
+### Breaking
+
+* Drop TYPO3 v12 support, require PHP 8.2 [Maik Schneider]
+
+* Remove the upgrade wizard that renamed the 1.x table `tx_oauth2_client_configs`: update 1.x installations to 4.x and run its wizard first [Maik Schneider]
+
+* Suggest `typo3/cms-setup` instead of requiring it: Composer installations on TYPO3 13.4 need it to manage providers in the user settings [Maik Schneider]
+
+### Bugfixes
+
+* Register the "manage providers" user setting under its own name, so saving user settings on TYPO3 v14 cannot move another user's identity [Maik Schneider]
+
+* Keep frontend logins started by a link working on TYPO3 v14 [Maik Schneider]
+
+* Allow installations without Composer on TYPO3 v14.3, where EXT:setup is part of EXT:backend [Maik Schneider]
+
+### Tasks
+
+* TYPO3 v14 compatibility (13.4 and 14.3) [Maik Schneider]
+
+* Replace the functional test harness with unit, functional and Playwright end-to-end tests on TYPO3 13.4 and 14.3 [Maik Schneider]
+
+* Run tests and static code analysis on GitHub Actions; remove the outdated CI and TER publish workflows [Maik Schneider]
+
+* Bundle `league/oauth2-client` in the TER package with `eliashaeussler/typo3-vendor-bundler`; CI checks that the bundle matches `composer.json` [Maik Schneider]
+
+
 ## 4.0.0 (2025-02-12)
 
 ### Tasks

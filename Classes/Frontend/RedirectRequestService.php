@@ -2,23 +2,8 @@
 
 declare(strict_types=1);
 
-/*
- * This file is part of the OAuth2 Client extension for TYPO3
- * - (c) 2021 waldhacker UG (haftungsbeschränkt)
- *
- * It is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License, either version 2
- * of the License, or any later version.
- *
- * For the full copyright and license information, please read the
- * LICENSE.txt file that was distributed with this source code.
- *
- * The TYPO3 project - inspiring people to share!
- */
-
 namespace Waldhacker\Oauth2Client\Frontend;
 
-use Exception;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Configuration\Features;
 use TYPO3\CMS\Core\Http\Uri;
@@ -28,9 +13,7 @@ class RedirectRequestService
 {
     private const REDIRECT_URI_QUERY_NAME = 'after-oauth2-redirect-uri';
 
-    public function __construct(private readonly SiteService $siteService, private readonly Features $features)
-    {
-    }
+    public function __construct(private readonly SiteService $siteService, private readonly Features $features) {}
 
     public function buildOriginalRequestData(ServerRequestInterface $request, bool $tryOverrideFromQuery = false): array
     {
@@ -49,7 +32,7 @@ class RedirectRequestService
 
         try {
             $redirectUri = new Uri(urldecode($mergedRequestedParameters[self::REDIRECT_URI_QUERY_NAME]));
-        } catch (Exception) {
+        } catch (\Exception) {
             return $this->buildOriginalRequestDataFromCurrentRequest($request);
         }
 
@@ -70,7 +53,7 @@ class RedirectRequestService
     {
         try {
             $uri = new Uri($originalUri);
-        } catch (Exception) {
+        } catch (\Exception) {
             return $originalUri;
         }
 

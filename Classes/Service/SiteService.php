@@ -2,23 +2,8 @@
 
 declare(strict_types=1);
 
-/*
- * This file is part of the OAuth2 Client extension for TYPO3
- * - (c) 2021 waldhacker UG (haftungsbeschränkt)
- *
- * It is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License, either version 2
- * of the License, or any later version.
- *
- * For the full copyright and license information, please read the
- * LICENSE.txt file that was distributed with this source code.
- *
- * The TYPO3 project - inspiring people to share!
- */
-
 namespace Waldhacker\Oauth2Client\Service;
 
-use InvalidArgumentException;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Http\ServerRequestFactory;
 use TYPO3\CMS\Core\Http\Uri;
@@ -85,7 +70,7 @@ class SiteService
         /** @var Site|null $site */
         $site = $this->getSite($request);
         $language = $this->getLanguage($request);
-        if ($site === null || $language === null) {
+        if (!$site instanceof Site || $language === null) {
             return self::CALLBACK_SLUG;
         }
 
@@ -103,7 +88,7 @@ class SiteService
     {
         $request = $request ?? $GLOBALS['TYPO3_REQUEST'] ?? ServerRequestFactory::fromGlobals();
         if (!($request instanceof ServerRequestInterface)) {
-            throw new InvalidArgumentException(
+            throw new \InvalidArgumentException(
                 sprintf('Request must implement "%s"', ServerRequestInterface::class),
                 1643446000
             );

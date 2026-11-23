@@ -1,0 +1,1 @@
+@import 'EXT:oauth2_client/Tests/Acceptance/Fixtures/TypoScript/setup.typoscript'

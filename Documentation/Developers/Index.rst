@@ -6,23 +6,69 @@
 Developer information
 =====================
 
-Basic backend authentication flows
-==================================
+.. contents::
+   :local:
+   :depth: 1
 
-Login flow
-----------
+.. _developer-events:
+
+PSR-14 events
+=============
+
+After TYPO3 has fetched the user from the provider and looked up the linked
+TYPO3 user, it dispatches a lookup event. A listener can replace the TYPO3 user,
+for example to create users on the fly. Return the full user row; with
+:php:`null` (nothing linked, nothing set) the login fails.
+
+``Waldhacker\Oauth2Client\Events\BackendUserLookupEvent``
+   Backend login. Getters: ``getProviderId()``, ``getProvider()``,
+   ``getAccessToken()``, ``getRemoteUser()``, ``getTypo3User()``,
+   ``getRequest()``. Setter: ``setTypo3User(array $typo3User)``.
+
+``Waldhacker\Oauth2Client\Events\FrontendUserLookupEvent``
+   Frontend login. Same as above, but ``getSite()`` and ``getLanguage()``
+   instead of ``getRequest()``.
+
+.. code-block:: php
+   :caption: EXT:site_package/Classes/EventListener/BackendUserLookup.php
+
+   namespace MyVendor\SitePackage\EventListener;
+
+   use TYPO3\CMS\Core\Attribute\AsEventListener;
+   use Waldhacker\Oauth2Client\Events\BackendUserLookupEvent;
+
+   #[AsEventListener]
+   final class BackendUserLookup
+   {
+       public function __invoke(BackendUserLookupEvent $event): void
+       {
+           if ($event->getTypo3User() !== null) {
+               return;
+           }
+           $claims = $event->getRemoteUser()->toArray();
+           // find or create a be_users row for $claims, then:
+           // $event->setTypo3User($row);
+       }
+   }
+
+The add-on `xima/xima-oauth2-extended
+<https://github.com/xima-media/xima-oauth2-extended>`__ implements user
+creation, updates and group mapping with these events.
+
+Other extension points: :confval:`implementationClassName
+<provider-implementationclassname>` (own provider classes),
+:confval:`collaborators <provider-collaborators>` and the
+:ref:`templates <configuration-templates>`.
+
+.. _developer-flows:
+
+Authentication flows
+====================
+
+Backend login
+-------------
 
 .. uml::
-
-   skinparam backgroundColor #EEE
-   skinparam handwritten false
-   skinparam sequence {
-       ArrowColor DarkGreen
-       ArrowFontSize 18
-       ParticipantBorderColor ForestGreen
-       ParticipantFontSize 20
-       ParticipantBackgroundColor TECHNOLOGY
-   }
 
    autonumber
 
@@ -33,232 +79,127 @@ Login flow
        User enters their provider credentials
        and grants access.
    end note
-   "OAuth2 Provider" -> "BackendAuthenticationService": Redirect to callback-url\nand provide access code & state
+   "OAuth2 Provider" -> "BackendAuthenticationService": Redirect to callback URL\nwith code & state
    "BackendAuthenticationService" -> "BackendAuthenticationService": Validate state (session)
-   "BackendAuthenticationService" -> "OAuth2 Provider": Fetch AccessToken by access code
-   "OAuth2 Provider" -> "BackendAuthenticationService": Provide AccessToken
-   "BackendAuthenticationService" -> "OAuth2 Provider": Fetch ResourceOwner by AccessToken
-   "OAuth2 Provider" -> "BackendAuthenticationService": Provide ResourceOwner
-   "BackendAuthenticationService" -> "BackendAuthenticationService": Match by ResourceOwner ID\n& Provider ID
-   "BackendAuthenticationService" -> "BackendAuthenticationService": Fire BackendUserLookupEvent
+   "BackendAuthenticationService" -> "OAuth2 Provider": Fetch access token by code
+   "BackendAuthenticationService" -> "OAuth2 Provider": Fetch resource owner by access token
+   "BackendAuthenticationService" -> "BackendAuthenticationService": Look up identity\n(provider ID & resource owner ID)
+   "BackendAuthenticationService" -> "BackendAuthenticationService": Dispatch BackendUserLookupEvent
    "BackendAuthenticationService" -> "TYPO3 Login": Return found user
    "TYPO3 Login" -> "TYPO3 Login": (optional) Evaluate MFA
    "TYPO3 Login" -> "TYPO3 Backend": Redirect to the backend
 
-   @enduml
-
-Registering new OAuth2 provider for backend user
-------------------------------------------------
+Backend linking
+---------------
 
 .. uml::
 
-   skinparam backgroundColor #EEE
-   skinparam handwritten false
-   skinparam sequence {
-       ArrowColor DarkGreen
-       ArrowFontSize 18
-       ParticipantBorderColor ForestGreen
-       ParticipantFontSize 20
-       ParticipantBackgroundColor TECHNOLOGY
-       NoteBackgroundColor ForestGreen
-       NoteBorderColor ForestGreen
-       NoteShadowing false
-   }
-
    autonumber
 
-   "TYPO3 Backend" -> "AuthorizeController (OAuth2 Popup)": User setup module opens a popup
-   "AuthorizeController (OAuth2 Popup)" -> "AuthorizeController (OAuth2 Popup)": Generate / set state (session)
-   "AuthorizeController (OAuth2 Popup)" -> "OAuth2 Provider": Request for\napplication registration (redirect)
+   "TYPO3 Backend" -> "AuthorizeController (popup)": "Manage OAuth2 providers" opens a popup
+   "AuthorizeController (popup)" -> "AuthorizeController (popup)": Generate / set state (session)
+   "AuthorizeController (popup)" -> "OAuth2 Provider": Authorization request (redirect)
    note left of "OAuth2 Provider"
        User enters their provider credentials
        and grants access.
    end note
-   "OAuth2 Provider" -> "AuthorizeController (OAuth2 Popup)": Redirect to callback-url\nand provide access code & state
-   "AuthorizeController (OAuth2 Popup)" -> "VerifyController": Post message with access code\n& state for evaluation
+   "OAuth2 Provider" -> "AuthorizeController (popup)": Redirect to callback URL\nwith code & state
+   "AuthorizeController (popup)" -> "VerifyController": Post code & state to the opener
    "VerifyController" -> "VerifyController": Validate state (session)
-   "VerifyController" -> "OAuth2 Provider": Fetch AccessToken by access code
-   "OAuth2 Provider" -> "VerifyController": Provide AccessToken
-   "VerifyController" -> "OAuth2 Provider": Fetch ResourceOwner by AccessToken
-   "OAuth2 Provider" -> "VerifyController": Provide ResourceOwner
-   "VerifyController" -> "VerifyController": Store\nprovider-ID\n& ResourceOwner-ID\n& TYPO3-user-ID\nin database
-   "VerifyController" -> "TYPO3 Backend": Redirect to user setup module
-   @enduml
+   "VerifyController" -> "OAuth2 Provider": Fetch access token by code
+   "VerifyController" -> "OAuth2 Provider": Fetch resource owner by access token
+   "VerifyController" -> "VerifyController": Store identity\n(provider ID, resource owner ID, TYPO3 user)
+   "VerifyController" -> "TYPO3 Backend": Redirect to "Manage OAuth2 providers"
 
-Creating backend users
-----------------------
+The frontend works the same way: ``FrontendAuthenticationService`` handles the
+login, ``RegistrationController`` the linking. Middlewares before and after the
+frontend authentication route the callback (:file:`Configuration/RequestMiddlewares.php`)
+and send the user back to the page the login or linking started on.
 
-This extension does not provide the possibility to create backend users on the fly itself.
-Its purpose is to provide OAuth2 authentication only. To allow backend users to register
-directly via OAuth2, the extension comes with a PSR-14 event
-:php:`Waldhacker\Oauth2Client\Events\BackendUserLookupEvent`
-that can be used to create the backend users.
-With the next release of this extension this documentation will explain
-how an implementation can look like. Furthermore, a reference implementation
-for user registration via Gitlab will be published soon.
+.. _developer-local-development:
 
-Basic frontend authentication flows
-===================================
+Local development
+=================
 
-Login flow
-----------
+Requirements: DDEV and Docker. The project contains a TYPO3 test instance, a
+`mock OAuth2 server <https://github.com/navikt/mock-oauth2-server>`__ and
+Playwright.
 
-.. uml::
+.. code-block:: bash
 
-   skinparam backgroundColor #EEE
-   skinparam handwritten false
-   skinparam sequence {
-       ArrowColor DarkGreen
-       ArrowFontSize 18
-       ParticipantBorderColor ForestGreen
-       ParticipantFontSize 20
-       ParticipantBackgroundColor TECHNOLOGY
-   }
+   ddev start
+   ddev init-typo3
 
-   autonumber
+``ddev init-typo3`` installs the Composer dependencies if needed, sets up a fresh
+database, two sites and the fixtures from :file:`Tests/Acceptance/Fixtures/`,
+and configures three mock providers in :file:`config/system/additional.php`:
+``mock`` (backend and frontend), ``mock-be`` and ``mock-fe``. Run it again for a
+clean state.
 
-   "TYPO3 Frontend" -> "FrontendAuthenticationService": Request OAuth2 login
-   "FrontendAuthenticationService" -> "FrontendAuthenticationService": Generate / set state (session)
-   "FrontendAuthenticationService" -> "OAuth2 Provider": Authentication request (redirect)
-   note left of "OAuth2 Provider"
-       User enters their provider credentials
-       and grants access.
-   end note
-   "OAuth2 Provider" -> "FrontendAuthenticationService": Redirect to callback-url\nand provide access code & state
-   "FrontendAuthenticationService" -> "FrontendAuthenticationService": Validate state (session)
-   "FrontendAuthenticationService" -> "OAuth2 Provider": Fetch AccessToken by access code
-   "OAuth2 Provider" -> "FrontendAuthenticationService": Provide AccessToken
-   "FrontendAuthenticationService" -> "OAuth2 Provider": Fetch ResourceOwner by AccessToken
-   "OAuth2 Provider" -> "FrontendAuthenticationService": Provide ResourceOwner
-   "FrontendAuthenticationService" -> "FrontendAuthenticationService": Match by ResourceOwner ID\n& Provider ID
-   "FrontendAuthenticationService" -> "FrontendAuthenticationService": Fire FrontendUserLookupEvent
-   "FrontendAuthenticationService" -> "TYPO3 Login": Return found user
-   "TYPO3 Login" -> "TYPO3 Frontend": Return to the location from which the OAuth2 login was made
-   @enduml
+*  Backend: ``http://oauth2-client.ddev.site/typo3/``, user ``admin``,
+   password ``Passw0rd!``.
+*  Frontend login page: ``http://oauth2-client.ddev.site/login``.
+*  Mock provider: ``http://oidc.oauth2-client.ddev.site/default``. Its login
+   form accepts any user name, which becomes the ``sub`` claim. Linked
+   personas from the fixtures are ``be-linked`` (backend user "BE linked")
+   and ``fe-linked`` (frontend user "FE linked"); see
+   :file:`Tests/Fixtures/MockOAuth2/config.json`.
 
-Registering new OAuth2 provider for frontend user
--------------------------------------------------
+The instance runs TYPO3 14.3. Switch to 13.4 (and back with ``^14.3``):
 
-.. uml::
+.. code-block:: bash
 
-   skinparam backgroundColor #EEE
-   skinparam handwritten false
-   skinparam sequence {
-       ArrowColor DarkGreen
-       ArrowFontSize 18
-       ParticipantBorderColor ForestGreen
-       ParticipantFontSize 20
-       ParticipantBackgroundColor TECHNOLOGY
-       NoteBackgroundColor ForestGreen
-       NoteBorderColor ForestGreen
-       NoteShadowing false
-   }
+   ddev composer update --with=typo3/cms-core:^13.4
+   ddev init-typo3
 
-   autonumber
+Tests and checks
+----------------
 
-   "TYPO3 Frontend" -> "RegistrationController": Request OAuth2 registration
-   "RegistrationController" -> "RegistrationController": Generate / set state (session)
-   "RegistrationController" -> "OAuth2 Provider": Request for\napplication registration (redirect)
-   note left of "OAuth2 Provider"
-       User enters their provider credentials
-       and grants access.
-   end note
-   "OAuth2 Provider" -> "RegistrationController": Redirect to callback-url\nand provide access code & state
-   "RegistrationController" -> "RegistrationController": Validate state (session)
-   "RegistrationController" -> "OAuth2 Provider": Fetch AccessToken by access code
-   "OAuth2 Provider" -> "RegistrationController": Provide AccessToken
-   "RegistrationController" -> "OAuth2 Provider": Fetch ResourceOwner by AccessToken
-   "OAuth2 Provider" -> "RegistrationController": Provide ResourceOwner
-   "RegistrationController" -> "RegistrationController": Store\nprovider-ID\n& ResourceOwner-ID\n& TYPO3-user-ID\nin database
-   "RegistrationController" -> "TYPO3 Frontend": Return to the location from which the OAuth2 registration was made
-   @enduml
+.. code-block:: bash
 
-Creating frontend users
------------------------
+   ddev composer test:unit         # unit tests
+   ddev composer test:functional   # functional tests
+   ddev playwright test            # end-to-end tests, after ddev init-typo3
+   ddev composer ci:sca            # PHP lint, php-cs-fixer, PHPStan, Composer and YAML checks
 
-This extension does not provide the possibility to create frontend users on the fly itself.
-Its purpose is to provide OAuth2 authentication only. To allow frontend users to register
-directly via OAuth2, the extension comes with a PSR-14 event
-:php:`Waldhacker\Oauth2Client\Events\FrontendUserLookupEvent`
-that can be used to create the frontend users.
-With the next release of this extension this documentation will explain
-how an implementation can look like. Furthermore, a reference implementation
-for frontend user registration via Gitlab will be published soon.
+GitHub Actions run the same commands for pull requests: unit and functional
+tests on TYPO3 13.4 and 14.3 with PHP 8.2 to 8.5, end-to-end tests on both
+TYPO3 versions, and static code analysis (:file:`.github/workflows/`).
 
+Bundled libraries
+-----------------
 
-Frontend integration
-====================
+The TER package ships ``league/oauth2-client`` in
+:file:`Resources/Private/Libs/` for classic mode, and :file:`ext_emconf.php`
+contains its autoload configuration. After changing the ``require`` section of
+:file:`composer.json`, rebuild both and commit the result:
 
-Login
------
+.. code-block:: bash
 
-An OAuth2 login is possible on all TYPO3 pages that are configured to allow logins
+   ddev composer libs:bundle
 
-(`Page Settings` -> Tab :guilabel:`Access` -> :guilabel:`Login Behaviour` (`fe_login_mode`)).
+CI fails if the bundle does not match :file:`composer.json`.
 
-It is not mandatory to use a login plugin like `fe_login`.
-A link in the form of :html:`https://your-typo3-site.example.com/some-site?oauth2-provider=<provider-identifier>&logintype=login` is sufficient.
-However, if you want to use social login buttons in the `fe_login` template, the `oauth2_client` extension already comes with an integration for that.
+Documentation
+-------------
 
-The extension provides a variable named :html:`oauth2Providers` in the fe_login template.
-This variable contains all the information you defined in :php:`$GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['oauth2_client']['providers']`.
-In the template you can now use this variable to create the social login buttons:
+Render this manual locally:
 
-.. code-block:: html
+.. code-block:: bash
 
-   <f:for each="{oauth2Providers}" as="provider">
-       <core:icon identifier="{provider.iconIdentifier}" size="large" />
-       <button type="submit" name="oauth2-provider" value="{provider.identifier}">
-           Login with {provider.label}
-       </button>
-   </f:for>
+   docker run --rm --pull always -v $(pwd):/project -it ghcr.io/typo3-documentation/render-guides:latest --config=Documentation
 
-.. figure:: ../Images/Frontend/loginScreen.png
-   :class: with-shadow
-   :alt: TYPO3 frontend login screen with configured OAuth2 providers
-   :width: 300px
+Open :file:`Documentation-GENERATED-temp/Index.html`.
 
-   TYPO3 frontend login screen with configured OAuth2 providers
+.. _developer-release:
 
-Registration
-------------
+Release
+=======
 
-To give logged in users the possibility to choose with which OAuth2 provider they want to log in in the future, the `oauth2_client` brings a plugin for this purpose.
-This plugin is called :guilabel:`Manage OAuth2 providers` (`oauth2client_manageproviders`).
+#. Update :file:`CHANGELOG.md` and the ``version`` in :file:`ext_emconf.php`.
+#. Run ``ddev composer libs:bundle`` if dependencies changed.
+#. Merge to ``main`` and push a tag with the version number, for example
+   ``5.0.0`` (no ``v`` prefix).
 
-This plugin can be placed, for example, on the user profile page and allows the website visitor to activate and deactivate social logins.
-
-.. figure:: ../Images/Frontend/configuredProviders.png
-   :class: with-shadow
-   :alt: TYPO3 frontend plugin with configured OAuth2 providers
-   :width: 600px
-
-   Let a logged in frontend user choose which OAuth2 provider to log in with
-
-The template of this plugin is intentionally kept rudimentary because it is assumed that you want to overwrite this template to adapt it to the needs of your frontend.
-Nevertheless it is implemented bootstrap5 compatible to provide a certain basic styling.
-
-To override the templates within your site package you have to add the following typoscript to your site package
-
-.. code-block:: typoscript
-
-   plugin.tx_oauth2client {
-       view {
-           templateRootPaths.100 = EXT:site_package/Resources/Private/Templates/
-           partialRootPaths.100 = EXT:site_package/Resources/Private/Partials/
-       }
-   }
-
-Now you can copy and style the original templates under the following paths:
-
-* `Resources/Private/Templates/Frontend/ManageProviders/List.html`
-* `Resources/Private/Partials/Frontend/ManageProviders/ProviderItem.html`
-
-
-Migration from version 1.x to 2.x
-=================================
-
-The table :sql:`tx_oauth2_client_configs` that used in version 1.x to contain the registered OAuth2 providers for backend users has been renamed to :sql:`tx_oauth2_beuser_provider_configuration` in version 2.x.
-To migrate the data there is an upgrade wizard named :guilabel:`Migrate OAuth2 table tx_oauth2_client_configs to tx_oauth2_beuser_provider_configuration`.
-Please run this wizard after you have updated to version 2.x.
-
+The tag triggers :file:`.github/workflows/release.yml`. It checks that the tag
+matches :file:`ext_emconf.php` and publishes the version to the TER.

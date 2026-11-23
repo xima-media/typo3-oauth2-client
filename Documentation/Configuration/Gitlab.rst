@@ -1,89 +1,41 @@
 .. include:: ../Includes.txt
 
-.. _configuration_gitlab:
+.. _configuration-gitlab:
 
-=======================================
-Configuration with Gitlab (self-hosted)
-=======================================
+======
+GitLab
+======
 
-.. note::
+Works with gitlab.com and self-hosted GitLab, using the bundled
+``GenericProvider``.
 
-   This example contains the callback URLs which are required for TYPO3 v11.
+At GitLab
+=========
 
-Adding the OAuth2 app in Gitlab
-===============================
+#. :guilabel:`User settings` > :guilabel:`Applications` (or a group or admin
+   application) > :guilabel:`Add new application`.
+#. :guilabel:`Redirect URI`: add the four
+   :ref:`redirect URIs <configuration-redirect-uris>`, one per line.
+#. Keep :guilabel:`Confidential` checked and select the scope ``read_user``.
+#. Copy :guilabel:`Application ID` and :guilabel:`Secret`.
 
--  Login to your Gitlab instance
--  Go to "User Settings" > "Applications"
--  Add a new application
-
-   -  Add the redirect URIs (backend):
-
-      -  `https://<your-TYPO3-installation>/typo3/login`
-      -  `https://<your-TYPO3-installation>/typo3/oauth2/callback/handle`
-
-   -  Add the redirect URIs (frontend):
-
-      -  `https://<your-TYPO3-installation>/<callback-slug>`
-
-   -  Set the application to "confidential"
-   -  Set the scopes "openid" and "read_user"
-
--  Save the application
--  Copy the client secret and client id
-
-.. figure:: ../Images/configuration_GitlabOauth2App.png
-   :class: with-shadow float-left
-   :alt: TYPO3 OAuth2 Gitlab App Configuration
-
-.. figure:: ../Images/configuration_GitlabOauth2AppOverview.png
-   :class: with-shadow float-left
-   :alt: TYPO3 OAuth2 Gitlab App Overview
-
-
-Adding the OAuth2 Gitlab app in TYPO3
-=====================================
-
-Add the following configuration to your `AdditionalConfiguration.php`:
+In TYPO3
+========
 
 .. code-block:: php
 
-   $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['oauth2_client'] = [
-       'providers' => [
-           'gitlab' => [
-               'label' => 'Gitlab',
-               'iconIdentifier' => 'oauth2-gitlab',
-               'description' => 'Login with Gitlab',
-               'implementationClassName' => \League\OAuth2\Client\Provider\GenericProvider::class,
-               'scopes' => [
-                   \Waldhacker\Oauth2Client\Service\Oauth2ProviderManager::SCOPE_BACKEND,
-               ],
-               'options' => [
-                   'clientId' => '<your-client-id-from-gitlab>',
-                   'clientSecret' => '<your-client-secret-from-gitlab>',
-                   'urlAuthorize' => 'https://<url-to-your-gitlab>/oauth/authorize',
-                   'urlAccessToken' => 'https://<url-to-your-gitlab>/oauth/token',
-                   'urlResourceOwnerDetails' => 'https://<url-to-your-gitlab>/api/v4/user',
-                   'scopes' => ['openid', 'read_user'],
-                   'scopeSeparator' => ' '
-               ],
-           ],
+   $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['oauth2_client']['providers']['gitlab'] = [
+       'label' => 'GitLab',
+       'options' => [
+           'clientId' => getenv('GITLAB_CLIENT_ID'),
+           'clientSecret' => getenv('GITLAB_CLIENT_SECRET'),
+           'urlAuthorize' => 'https://gitlab.example.com/oauth/authorize',
+           'urlAccessToken' => 'https://gitlab.example.com/oauth/token',
+           'urlResourceOwnerDetails' => 'https://gitlab.example.com/api/v4/user',
+           'scopes' => ['read_user'],
+           'scopeSeparator' => ' ',
        ],
    ];
 
-Registering the icon (optional)
-===============================
-
-If you want to use a custom icon, in your site package `Configuration/Icons.php` register the icon like this:
-
-.. code-block:: php
-
-   <?php
-      return [
-          'oauth2-gitlab' => [
-              'provider' => \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
-              'name' => 'gitlab',
-          ],
-      ];
-
-If you want to use the default icon instead, remove the `iconIdentifier` from the configuration.
+``/api/v4/user`` returns the numeric GitLab user ID as ``id``, the default of
+``responseResourceOwnerId``.

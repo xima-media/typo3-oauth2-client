@@ -1,12 +1,19 @@
 .build/
 composer.lock
-.phplint-cache
 .php_cs.cache
 .php-cs-fixer.cache
-.phplint.cache
 .phpunit.cache
 Documentation-GENERATED-temp
 .idea
-var
-config
+/config
+/public
+/var
+/vendor
 extension/
+node_modules
+Tests/Playwright/playwright-report
+Tests/Playwright/test-results
+# Classic mode loads the bundled libraries via the autoload section in ext_emconf.php
+/Resources/Private/Libs/vendor/autoload.php
+/Resources/Private/Libs/vendor/composer/
+/Resources/Private/Libs/vendor/composer-bundled/

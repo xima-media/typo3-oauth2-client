@@ -1,0 +1,4 @@
+page = PAGE
+page.10 < styles.content.get
+
+plugin.tx_felogin_login.view.templateRootPaths.100 = EXT:oauth2_client/Tests/Acceptance/Fixtures/Templates/Felogin/

@@ -1,5 +1,0 @@
-plugin.tx_felogin_login {
-    view {
-        templateRootPaths.100 = EXT:oauth2_client/Tests/Functional/Fixtures/Frontend/Templates/
-    }
-}

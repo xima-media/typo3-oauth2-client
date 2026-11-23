@@ -6,121 +6,107 @@
 User guide
 ==========
 
+A provider only works after you linked it to your TYPO3 account once. Ask your
+administrator which providers are available.
+
 Backend
 =======
 
-Register an OAuth2 provider as backend user
--------------------------------------------
+Link a provider
+---------------
 
-.. rst-class:: bignums-xxl
+.. rst-class:: bignums
 
-1. Go to :guilabel:`User Settings`
+1. Open your user settings
 
-   To register with an OAuth2 provider, go to your user settings and click :guilabel:`Setup OAuth2 Providers`.
+   Click your user name in the top bar, then :guilabel:`User Settings`. On the
+   :guilabel:`Account security` tab, click :guilabel:`Manage OAuth2 providers`.
 
    .. figure:: ../Images/Backend/userSettings_setup.png
       :class: with-shadow
-      :alt: TYPO3 user setup module
+      :alt: User settings, tab "Account security", with the button "Manage OAuth2 providers"
       :width: 600px
 
-      Setup OAuth2 provider configuration
+      The button below the multi-factor authentication settings
 
-2. Activate an OAuth2 provider
+2. Activate a provider
 
-   On the next page, click on :guilabel:`Activate` for the OAuth2 provider you want to login with.
+   Click :guilabel:`Activate` on the provider you want to use.
 
    .. figure:: ../Images/Backend/configuredProviders.png
       :class: with-shadow
-      :alt: TYPO3 user setup module with configured OAuth2 providers
+      :alt: Module "OAuth2 providers" with an active and an inactive provider
       :width: 600px
 
-      Manage OAuth2 provider configuration
+      Active and inactive providers
 
-3. Login and grant access
+3. Sign in at the provider
 
-   In the popup that opens, enter your OAuth2 provider user credentials and confirm
-   that you are granting access to TYPO3.
+   A popup opens. Sign in and allow the access. The popup closes and the
+   provider shows :guilabel:`Active`.
 
-   .. note::
+   If nothing opens, allow popups for the TYPO3 backend.
 
-      If the popup does not open, make sure you are not using a popup blocker.
+To unlink a provider, click :guilabel:`Deactivate` and confirm.
 
-Login as backend user with an OAuth2 provider
----------------------------------------------
+Log in with a provider
+----------------------
 
-.. rst-class:: bignums-xxl
+.. rst-class:: bignums
 
-1. Switch to OAuth2 providers
+1. Switch the login form
 
-   On the TYPO3 login screen click the link :guilabel:`Login with OAuth2 providers (Social login)`
+   On the TYPO3 login screen, click
+   :guilabel:`Login with OAuth2 providers (Social login)`.
 
    .. figure:: ../Images/Backend/login_step1.png
       :class: with-shadow
-      :alt: TYPO3 login form
-      :width: 600px
+      :alt: TYPO3 backend login form with the link "Login with OAuth2 providers"
+      :width: 300px
 
-      Choose OAuth2 provider
+      The link below the login form
 
-2. Choose an OAuth2 provider
+2. Choose the provider
 
-   Choose the OAuth2 provider you want to use for logging in. Remember: you can only
-   use a provider that you registered for your backend user in the previous step.
+   Click the provider. After signing in there, you are logged in to TYPO3.
+   If multi-factor authentication is set up, TYPO3 asks for it next.
 
    .. figure:: ../Images/Backend/loginScreen.png
       :class: with-shadow
-      :alt: TYPO3 backend login screen with configured OAuth2 providers
-      :width: 600px
+      :alt: TYPO3 backend login screen with one button per provider
+      :width: 300px
 
-      Choose an OAuth2 provider
+      One button per provider
+
+TYPO3 remembers the login form you used last time.
 
 Frontend
 ========
 
-Register an OAuth2 provider as frontend user
---------------------------------------------
+Link a provider
+---------------
 
-.. rst-class:: bignums-xxl
+Log in with your username and password, then open the page with the
+"Manage OAuth2 providers" plugin (often your profile page). Click
+:guilabel:`Activate` on a provider and sign in there. You return to the same
+page. :guilabel:`Deactivate` unlinks the provider.
 
-1. Go into your user settings
+.. figure:: ../Images/Frontend/configuredProviders.png
+   :class: with-shadow
+   :alt: Frontend plugin "Manage OAuth2 providers" with an active and an inactive provider
+   :width: 500px
 
-   To register with an OAuth2 provider, go to your user settings.
+   The plugin with one linked provider
 
-   .. figure:: ../Images/Frontend/configuredProviders.png
-      :class: with-shadow
-      :alt: TYPO3 frontend plugin with configured OAuth2 providers
-      :width: 600px
+Log in with a provider
+----------------------
 
-      Setup OAuth2 provider configuration
+On the login page, click the button of a linked provider and sign in there.
+You return to the page you started on, logged in.
 
-2. Activate an OAuth2 provider
+.. figure:: ../Images/Frontend/loginScreen.png
+   :class: with-shadow
+   :alt: Frontend login form with one button per provider below the password form
+   :width: 500px
 
-   Click on :guilabel:`Activate` for the OAuth2 provider you want to login with.
-
-   .. figure:: ../Images/Frontend/configuredProviders.png
-      :class: with-shadow
-      :alt: TYPO3 frontend plugin with configured OAuth2 providers
-      :width: 600px
-
-      Manage OAuth2 provider configuration
-
-3. Login and grant access
-
-   Enter your OAuth2 provider user credentials and confirm
-   that you are granting access to TYPO3.
-
-Login as frontend user with an OAuth2 provider
-----------------------------------------------
-
-.. rst-class:: bignums-xxl
-
-1. Switch to OAuth2 providers
-
-   On the TYPO3 login screen, choose the OAuth2 provider you want to use for logging in.
-   Remember: you can only use a provider that you registered for your frontend user in the previous step.
-
-   .. figure:: ../Images/Frontend/loginScreen.png
-      :class: with-shadow
-      :alt: TYPO3 frontend login screen
-      :width: 600px
-
-      Choose OAuth2 provider
+   The login form of a site with two providers

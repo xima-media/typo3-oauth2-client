@@ -2,20 +2,6 @@
 
 declare(strict_types=1);
 
-/*
- * This file is part of the OAuth2 Client extension for TYPO3
- * - (c) 2021 waldhacker UG (haftungsbeschränkt)
- *
- * It is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License, either version 2
- * of the License, or any later version.
- *
- * For the full copyright and license information, please read the
- * LICENSE.txt file that was distributed with this source code.
- *
- * The TYPO3 project - inspiring people to share!
- */
-
 namespace Waldhacker\Oauth2Client\Controller\Frontend;
 
 use Doctrine\DBAL\Exception;
@@ -44,8 +30,7 @@ class ManageProvidersController extends ActionController
         private readonly SessionManager $sessionManager,
         private readonly RedirectRequestService $redirectRequestService,
         private readonly Context $context
-    ) {
-    }
+    ) {}
 
     /**
      * @throws AspectNotFoundException
@@ -55,7 +40,6 @@ class ManageProvidersController extends ActionController
      */
     public function listAction(): ?ResponseInterface
     {
-        /** @var ServerRequestInterface $serverRequest */
         $serverRequest = $this->request;
         /** @var UserAspect $frontendUser */
         $frontendUser = $this->context->getAspect('frontend.user');
@@ -67,7 +51,7 @@ class ManageProvidersController extends ActionController
             $userid = (int)$frontendUser->get('id');
             $this->view->assignMultiple([
                 'providers' => $this->oauth2ProviderManager->getEnabledFrontendProviders(),
-                'activeProviders' => $this->frontendUserRepository->getActiveProviders($userid)
+                'activeProviders' => $this->frontendUserRepository->getActiveProviders($userid),
             ]);
         }
 
