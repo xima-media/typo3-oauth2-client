@@ -23,7 +23,7 @@ For more info, please refer to the documentation.
 
 ## Credits
 
-Originally developed by [Oliver Eglseder](https://www.co-stack.com/) and [waldhacker](https://waldhacker.dev), now maintained by [XIMA Media GmbH](https://www.xima.de).
+Originally developed by Oliver Eglseder and waldhacker.
 
 ## Issues & Contributions
 
